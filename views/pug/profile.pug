@@ -1,0 +1,42 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Profile Page
+    style.
+      /* Global styles */
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      /* Profile card container */
+      .profile-card {
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+      }
+      /* Username styling */
+      .profile-card h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        color: #333;
+      }
+      /* Additional text styling */
+      .profile-card p {
+        font-size: 1.2rem;
+        color: #666;
+      }
+  body
+    .profile-card
+      h1= username
+      p Welcome to your profile page!
