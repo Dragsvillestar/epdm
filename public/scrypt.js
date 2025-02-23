@@ -7,6 +7,10 @@ const projectSaveStatus = document.getElementById("projectSaveStatus");
 const projectFindDialog = document.getElementById("projectFindDialog");
 const projectUpdateDialog = document.getElementById("projectUpdateDialog");
 const projectRegForm = document.getElementById("projectRegForm");
+const deleteProjectDialog = document.getElementById("deleteProjectDialog");
+const deleteWarnng = document.getElementById("deleteWarningdialog");
+const deleteProjectForm = document.getElementById("deleteProjectForm");
+
   
 const projectEntries = [
   "Project ID",
@@ -59,13 +63,19 @@ const closeLogin = () => {
     adminLoginDialog.close();
 }; 
 
+const resetLogin = () => {
+  adminForm.reset();
+};
+
 const openProjectReg = () => {
     projectRegDialog.showModal();
+    adminMainDialog.close();
 };
 
 const closeProjectReg = () => {
     projectRegDialog.close();
-    projectRegForm.reset();
+    projectRegForm.reset(); 
+    adminMainDialog.showModal();
 };
 
 const openAdmin= () => {
@@ -103,6 +113,16 @@ const closeUpdate = () => {
     projectFindDialog.showModal();
 };
 
+const openDeleteProject = () => {
+  deleteProjectDialog.showModal();
+  adminMainDialog.close();
+}
+
+const closeDeleteProject = () => {
+    deleteProjectDialog.close();
+    adminMainDialog.showModal();
+};
+
 document.getElementById("adminRegLink").addEventListener("click", function(event) {
     event.preventDefault();
     adminReg();
@@ -110,9 +130,11 @@ document.getElementById("adminRegLink").addEventListener("click", function(event
 
 const adminReg = () => {  
     closeLogin(); 
+    adminForm.reset();
     openAdminReg();       
 }
 const cancelReg = () => {
+    document.getElementById("adminRegistrationForm").reset();
     closeAdminReg() ;
     openLogin();
 }
@@ -335,9 +357,24 @@ const projectCall = (data) => {
       <button type="button" class="edit-btn" data-field="projectOverview">Edit</button>
     </li>
     <li class="mb-2">
+      <label for="classification" class="form-label">Classification</label>
+      <span class="profileSpan" id="classificationDisplay">${data.project.classification || ''}</span>
+      <button type="button" class="edit-btn" data-field="classification">Edit</button>
+    </li>
+    <li class="mb-2">
+      <label for="projectFinance" class="form-label">Project Finance</label>
+      <span class="profileSpan" id="projectFinanceDisplay">${data.project.projectFinance || ''}</span>
+      <button type="button" class="edit-btn" data-field="projectFinance">Edit</button>
+    </li>
+    <li class="mb-2">
       <label for="subContractors" class="form-label">Sub-Contractors</label>
       <span class="profileSpan" id="subContractorsDisplay">${data.project.subContractors || ''}</span>
       <button type="button" class="edit-btn" data-field="subContractors">Edit</button>
+    </li>
+    <li class="mb-2">
+      <label for="section" class="form-label">Section</label>
+      <span class="profileSpan" id="sectionDisplay">${data.project.section || ''}</span>
+      <button type="button" class="edit-btn" data-field="section">Edit</button>
     </li>
     <li class="mb-2">
       <label for="projectManagerNameClient" class="form-label">Project Manager Name (Client)</label>
@@ -439,9 +476,9 @@ const projectUpdateCancel = () => {
         <ul>${resetentries}</ul>
         <p id="projectUpdateInfo" class="text-center fw-bold"></p>
         <div class="d-flex justify-content-evenly">
-            <button id="confirmChanges" class="mt-3">Confirm Changes</button>
-            <button id="cancelChanges" class="mt-3" onclick = "projectUpdateCancel()">Cancel</button>
-            <button id="goBack" class="mt-3" onclick = "closeUpdate()">Back</button>
+            <button id="confirmChanges" class="mt-3 btn btn-primary">Confirm Changes</button>
+            <button id="cancelChanges" class="mt-3 btn btn-danger" onclick = "projectUpdateCancel()">Cancel</button>
+            <button id="goBack" class="mt-3 btn btn-dark" onclick = "closeUpdate()">Back</button>
         </div>
     </div>
     `;
@@ -449,239 +486,168 @@ const projectUpdateCancel = () => {
 
 let updateData = {};
 let previousData = {};
+let originalUpdateMarkup = ""; // Declare it at a higher scope
 
 function bindEditButtons() {
-    document.querySelectorAll('.edit-btn').forEach(button => {
-      button.addEventListener('click', (e) => {
-        const field = e.target.getAttribute('data-field');
-        // For composite fields, the display container may be different.
-        // For simple fields, we use the span with id = field + "Display"
-        let displaySpan = document.getElementById(`${field}Display`);
-  
-        // ----- Composite Field: Estimated Budget -----
-        if (field === "estimatedBudget") {
-          // We assume the displayed text is like "₦5000000" or "$5000000"
-          if (e.target.textContent === 'Edit') {
-            let currentText = displaySpan.textContent.trim();
-            let currentCurrency = "NGN"; 
-            let currentAmount = currentText;
-            if (currentText.startsWith("₦")) {
-              currentCurrency = "NGN";
-              currentAmount = currentText.substring(1).trim();
-            } else if (currentText.startsWith("$")) {
-              currentCurrency = "USD";
-              currentAmount = currentText.substring(1).trim();
-            }
-            // Replace the span with a select and input
-            displaySpan.innerHTML = `
-              <select class="form-select-sm" id="estimated-budget-currency" name="estimated-budget-currency" style="width: auto;">
-                <option value="NGN" ${currentCurrency === "NGN" ? "selected" : ""}>₦</option>
-                <option value="USD" ${currentCurrency === "USD" ? "selected" : ""}>$</option>
-              </select>
-              <input type="number" class="form-control" id="estimated-budget" name="estimated-budget" placeholder="Enter Estimated Budget" value="${currentAmount}">
-            `;
-            e.target.textContent = 'Save';
-          } else {
-            // Save: get the new values
-            const newCurrency = document.getElementById("estimated-budget-currency").value;
-            const newAmount = document.getElementById("estimated-budget").value;
-            updateData["estimated-budget-currency"] = newCurrency;
-            updateData["estimated-budget"] = newAmount;
-            const displayCurrency = newCurrency === "NGN" ? "₦" : "$";
-            displaySpan.textContent = displayCurrency + newAmount;
-            e.target.textContent = 'Edit';
-          }
+  document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', (e) => {
+      const field = e.target.getAttribute('data-field');
+      let displaySpan = document.getElementById(`${field}Display`);
+
+      if (e.target.textContent === 'Edit') {
+        let currentValue = displaySpan.textContent;
+        let inputType = field.toLowerCase().includes("date") ? "date" : "text";
+        displaySpan.innerHTML = `<input type="${inputType}" id="${field}Input" name="${field}" value="${currentValue}" />`;
+        e.target.textContent = 'Save';
+      } else {
+        const newValue = document.getElementById(`${field}Input`).value;
+        if (newValue !== previousData[field]) {
+          updateData[field] = newValue;
+        } else {
+          delete updateData[field];
         }
-        // ----- Composite Field: Contract Value -----
-        else if (field === "contractValue") {
-          // This field is displayed via a container with id "contractValueDisplay"
-          const container = document.getElementById("contractValueDisplay");
-          if (e.target.textContent === 'Edit') {
-            // Expect two inputs: min and max
-            const minEl = container.querySelector('#contract-value-min');
-            const maxEl = container.querySelector('#contract-value-max');
-            const currentMin = minEl ? minEl.value : "";
-            const currentMax = maxEl ? maxEl.value : "";
-            container.innerHTML = `
-              <span class="input-group-text">$</span>
-              <input type="number" class="form-control" id="contract-value-min" name="contract-value-min" placeholder="Min Value" value="${currentMin}">
-              <span class="input-group-text">-</span>
-              <span class="input-group-text">$</span>
-              <input type="number" class="form-control" id="contract-value-max" name="contract-value-max" placeholder="Max Value" value="${currentMax}">
-            `;
-            e.target.textContent = 'Save';
-          } else {
-            const newMin = document.getElementById("contract-value-min").value;
-            const newMax = document.getElementById("contract-value-max").value;
-            updateData["contract-value-min"] = newMin;
-            updateData["contract-value-max"] = newMax;
-            const container = document.getElementById("contractValueDisplay");
-            container.innerHTML = `
-              <span class="input-group-text">$</span>
-              <input type="number" class="form-control" id="contract-value-min" name="contract-value-min" placeholder="Min Value" value="${newMin}" disabled>
-              <span class="input-group-text">-</span>
-              <span class="input-group-text">$</span>
-              <input type="number" class="form-control" id="contract-value-max" name="contract-value-max" placeholder="Max Value" value="${newMax}" disabled>
-            `;
-            e.target.textContent = 'Edit';
-          }
-        }
-        // ----- Composite Field: Local Spending -----
-        else if (field === "localSpending") {
-          // This field is displayed in a container with id "localSpendingDisplay"
-          const container = document.getElementById("localSpendingDisplay");
-          if (e.target.textContent === 'Edit') {
-            // Since original display is plain text like "₦100000", parse it:
-            let currentText = container.textContent.trim();
-            let currentCurrency = "NGN";
-            let currentAmount = currentText;
-            if (currentText.startsWith("₦")) {
-              currentCurrency = "NGN";
-              currentAmount = currentText.substring(1).trim();
-            } else if (currentText.startsWith("$")) {
-              currentCurrency = "USD";
-              currentAmount = currentText.substring(1).trim();
-            }
-            container.innerHTML = `
-              <select class="form-select-sm" id="local-spending-currency" name="local-spending-currency" style="width: auto;">
-                <option value="NGN" ${currentCurrency === "NGN" ? "selected" : ""}>₦</option>
-                <option value="USD" ${currentCurrency === "USD" ? "selected" : ""}>$</option>
-              </select>
-              <input type="number" class="form-control" id="local-spending" name="local-spending" placeholder="Enter Local Spending" value="${currentAmount}">
-            `;
-            e.target.textContent = 'Save';
-          } else {
-            const newCurrency = document.getElementById("local-spending-currency").value;
-            const newAmount = document.getElementById("local-spending").value;
-            updateData["local-spending-currency"] = newCurrency;
-            updateData["local-spending"] = newAmount;
-            const displayCurrency = newCurrency === "NGN" ? "₦" : "$";
-            const container = document.getElementById("localSpendingDisplay");
-            container.innerHTML = `${displayCurrency}${newAmount}`;
-            e.target.textContent = 'Edit';
-          }
-        }
-        // ----- Composite Field: Foreign Spending -----
-        else if (field === "foreignSpending") {
-          // For foreignSpending, the displayed text likely includes a currency symbol (e.g. "$500000")
-          const container = document.getElementById("foreignSpendingDisplay");
-          if (e.target.textContent === 'Edit') {
-            let currentText = container.textContent.trim();
-            // Remove any non-numeric characters to extract the amount.
-            let currentAmount = currentText.replace(/\D/g, '');
-            container.innerHTML = `
-              <span class="m-2 text-light">$</span>
-              <input type="number" class="form-control" id="foreign-spending" name="foreign-spending" placeholder="Enter Foreign Spending" value="${currentAmount}">
-            `;
-            e.target.textContent = 'Save';
-          } else {
-            const newValue = document.getElementById("foreign-spending").value;
-            updateData["foreign-spending"] = newValue;
-            const container = document.getElementById("foreignSpendingDisplay");
-            container.innerHTML = `<span class="m-2 text-light">$</span>${newValue}`;
-            e.target.textContent = 'Edit';
-          }
-        }
-        // ----- Default: Simple Fields -----
-        else {
-          if (e.target.textContent === 'Edit') {
-            let currentValue = displaySpan.textContent;
-            let inputType = "text";
-            if (field.toLowerCase().includes("date")) {
-              inputType = "date";
-              if (currentValue && currentValue.includes("T")) {
-                currentValue = currentValue.split("T")[0];
-              }
-            } else if (["capacity"].includes(field)) {
-              inputType = "number";
-            }
-            displaySpan.innerHTML = `<input type="${inputType}" id="${field}Input" name="${field}" value="${currentValue}" />`;
-            e.target.textContent = 'Save';
-          } else {
-            const newValue = document.getElementById(`${field}Input`).value;
-            if (newValue !== previousData[field]) {
-              updateData[field] = newValue;
-            } else {
-              delete updateData[field];
-            }
-            displaySpan.textContent = newValue;
-            e.target.textContent = 'Edit';
-          }
-        }
-      });
+        displaySpan.textContent = newValue;
+        e.target.textContent = 'Edit';
+      }
     });
-  }
-    
+  });
+
+  document.getElementById("confirmChanges").addEventListener("click", () => {
+    if (Object.keys(updateData).length === 0) {
+      document.getElementById("projectUpdateInfo").textContent = "No changes to update.";
+      return;
+    }
+
+    fetch(`/new-project/project-update?projectId=${previousData.projectId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updateData)
+    })
+      .then(response => response.json())
+      .then(result => {
+        if (result.success) {
+          console.log("Project updated successfully:", updateData);
+          document.getElementById("projectUpdateInfo").textContent = "Project updated successfully";
+          document.getElementById("projectUpdateInfo").style.color = "green";
+          previousData = { ...previousData, ...updateData }; // Merge updated values
+          updateData = {};
+          originalUpdateMarkup = projectUpdateDialog.innerHTML;
+        } else {
+          console.error("Error updating project:", result.message);
+          document.getElementById("projectUpdateInfo").style.color = "red";
+          document.getElementById("projectUpdateInfo").textContent = "Error updating project: " + result.message;
+        }
+      })
+      .catch(err => console.error("Error:", err));
+  });
+
+  document.getElementById("cancelChanges").addEventListener("click", () => {
+    projectUpdateDialog.innerHTML = originalUpdateMarkup; // Fixed scope issue
+    bindEditButtons();
+  });
+}
+
 document.getElementById("findProjectForm").addEventListener("submit", function (event) {
-    event.preventDefault();
+  event.preventDefault();
+  let projectId = document.getElementById("projectFindId").value;
 
-    let projectId = document.getElementById("projectFindId").value;
+  fetch(`/new-project/findProject/${projectId}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        let msgElement = document.getElementById("projectFindMsg");
+        msgElement.textContent = "Project not found!";
+        setTimeout(() => {
+          msgElement.textContent = "";
+        }, 3000);
+      } else {
+        console.log(data.project);
+        previousData = { ...data.project };
+        let entries = projectCall(data);
 
-    fetch(`/new-project/findProject/${projectId}`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.error) {
-                let msgElement = document.getElementById("projectFindMsg");
-                msgElement.textContent = "Project not found!";
-                setTimeout(() => {
-                    msgElement.textContent = "";
-                }, 3000);
-            } else {
-                console.log(data.project);
+        projectUpdateDialog.innerHTML = `
+          <div id="projectProfileDiv">
+            <ul>${entries}</ul>
+            <p id="projectUpdateInfo" class="text-center fw-bold"></p>
+            <div class="d-flex justify-content-evenly">
+              <button id="confirmChanges" class="mt-3 btn btn-primary">Confirm Changes</button>
+              <button id="cancelChanges" class="mt-3 btn btn-danger">Cancel</button>
+              <button id="goBack" class="mt-3 btn btn-dark" onclick="closeUpdate()">Back</button>
+            </div>
+          </div>
+        `;
 
-                previousData = { ...data.project }; 
-
-                let entries = projectCall(data);          
-
-                projectUpdateDialog.innerHTML = `
-                    <div id="projectProfileDiv">
-                        <ul>${entries}</ul>
-                        <p id="projectUpdateInfo" class="text-center fw-bold"></p>
-                        <div class="d-flex justify-content-evenly">
-                            <button id="confirmChanges" class="mt-3">Confirm Changes</button>
-                            <button id="cancelChanges" class="mt-3">Cancel</button>
-                            <button id="goBack" class="mt-3" onclick = "closeUpdate()">Back</button>
-                        </div>
-                    </div>
-                `;
-
-                const originalUpdateMarkup = projectUpdateDialog.innerHTML;
-
-                bindEditButtons();
-
-                document.getElementById("confirmChanges").addEventListener("click", () => {
-                    if (Object.keys(updateData).length === 0) {
-                        document.getElementById("projectUpdateInfo").textContent = "No changes to update.";
-                        return;
-                    }
-
-                    fetch('/new-project/project-update', {
-                        method: 'PATCH',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(updateData)
-                    })
-                        .then(response => response.json())
-                        .then(result => {
-                            if (result.success) {
-                                console.log("Project updated successfully:", updateData);
-                                document.getElementById("projectUpdateInfo").textContent = "Project updated successfully";
-                                previousData = { ...previousData, ...updateData }; // Merge updated values
-                                updateData = {};
-                            } else {
-                                console.error("Error updating project:", result.message);
-                                document.getElementById("projectUpdateInfo").textContent = "Error updating project: " + result.message;
-                            }
-                        })
-                        .catch(err => console.error("Error:", err));
-                });
-               
-                openUpdate();
-                projectFindDialog.close();
-            }
-        })
-        .catch(err => console.error("Error fetching project:", err));
+        originalUpdateMarkup = projectUpdateDialog.innerHTML;
+        bindEditButtons();
+        openUpdate();
+        projectFindDialog.close();
+      }
+    })
+    .catch(err => console.error("Error fetching project:", err));
 });
 
 
+deleteProjectForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  
+  // Get the project ID value from the input element
+  const projectIdInput = document.getElementById("deleteProjectId");
+  const projectId = projectIdInput.value;
+  
+  // Make the fetch call with correct syntax
+  fetch("/new-project/delete", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ projectId: projectId })
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById("projectDeleteMsg").textContent = data.message;
+        deleteProjectForm.reset();
+        setTimeout(() => {document.getElementById("projectDeleteMsg").textContent = ""},3000);
+      } else if (data.error) {
+        document.getElementById("projectDeleteMsg").textContent = data.error;
+      }
+    })
+    .catch(error => console.error("Error:", error));
+});
+
+document.getElementById("adminRegistrationForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  // Gather values from the form inputs
+  const newAdminUsername = document.getElementById("newAdminUsername").value;
+  const newAdminPassword = document.getElementById("newAdminPassword").value;
+  const currentAdminUsername = document.getElementById("currentAdminUsername").value;
+  const currentAdminPassword = document.getElementById("currentAdminPassword").value;
+  
+  const messageElement = document.getElementById("regmessage");
+
+  try {
+    const response = await fetch("/admin/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        newAdminUsername,
+        newAdminPassword,
+        currentAdminUsername,
+        currentAdminPassword
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      messageElement.style.color = "lightgreen";
+      messageElement.textContent = data.message;
+    } else {
+      messageElement.style.color = "red";
+      messageElement.textContent = data.error;
+    }
+  } catch (error) {
+    console.error("Error submitting registration:", error);
+    messageElement.style.color = "red";
+    messageElement.textContent = "An error occurred connecting to the server.";
+  }
+});

@@ -24,8 +24,8 @@
                     <p id="message" class="smt-3 mb-0 mx-auto" style="display:block; height: 20px;"></p>
                     <p class="text-center mb-1 mt-2 mx-auto"  style="display:block;">Register a new Admin <a href="#" id="adminRegLink">Here</a></p>
                 <div class="d-flex justify-content-center loginButtons">
-                    <button class = "mt-3 mb-1" type="submit" id = "submitLogin">Login</button>
-                    <button class = "mt-3 mb-1 mx-3" type="button" id = "cancelLogin" onclick="">Cancel</button>            
+                    <button class = "mt-3 mb-1 btn btn-primary" type="submit" id = "submitLogin">Login</button>
+                    <button class = "mt-3 mb-1 mx-3 btn btn-danger" type="button" id = "cancelLogin" onclick="resetLogin()">Cancel</button>            
                 </div>
             </div>
         </form>
@@ -41,7 +41,7 @@
                     <button class="btn btn-warning shadow-lg w-100 py-2 fw-bold todo-button"  onclick="openFind()">Update Existing Project</button>
                 </div>
                 <div class="col-md-6">
-                    <button class="btn btn-danger shadow-lg w-100 py-2 fw-bold todo-button">Delete Project</button>
+                    <button class="btn btn-danger shadow-lg w-100 py-2 fw-bold todo-button" onclick="openDeleteProject()">Delete Project</button>
                 </div>
                 <div class="col-md-6">
                     <button class="btn btn-success shadow-lg w-100 py-2 fw-bold todo-button">Send Email</button>
@@ -52,18 +52,33 @@
     </dialog>    
     <dialog id="adminSignUpDialog">
         <h2 class="mb-3">Admin Registration</h2>
+        <h5 class="mb-3">To register,you will need the credentials of a current admin member</h5>
         <form id="adminRegistrationForm">
-            <div class="mb-3">
-            <label for="admin-username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="signup-username" name="username" placeholder="Enter Username" required>
-            </div>
-            <div class="mb-3">
-            <label for="admin-password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="signup-password" name="password" placeholder="Enter Password" required>
-            <p id="regmessage" class="smt-3 mb-0 mx-auto" style="display:block; height: 20px;"></p>                    
-            </div>
-            <button type="submit" class="btn btn-primary">Register</button>
-            <button type="button" class="btn btn-primary" onclick="cancelReg()">Cancel</button>
+          <!-- New Admin Credentials -->
+          <div class="mb-3">
+            <label for="newAdminUsername" class="form-label">New Admin Username</label>
+            <input type="text" class="form-control" id="newAdminUsername" name="newAdminUsername" placeholder="Enter New Admin Username" required>
+          </div>
+          <div class="mb-3">
+            <label for="newAdminPassword" class="form-label">New Admin Password</label>
+            <input type="password" class="form-control" id="newAdminPassword" name="newAdminPassword" placeholder="Enter New Admin Password" required>
+          </div>
+          
+          <!-- Current Admin Authentication -->
+          <h4 class="mt-4">Current Admin Authentication</h4>
+          <p>Please enter your credentials to authorize the registration.</p>
+          <div class="mb-3">
+            <label for="currentAdminUsername" class="form-label">Current Admin Username</label>
+            <input type="text" class="form-control" id="currentAdminUsername" name="currentAdminUsername" placeholder="Enter Your Username" required>
+          </div>
+          <div class="mb-3">
+            <label for="currentAdminPassword" class="form-label">Current Admin Password</label>
+            <input type="password" class="form-control" id="currentAdminPassword" name="currentAdminPassword" placeholder="Enter Your Password" required>
+          </div>
+          
+          <p id="regmessage" class="mb-2" style="height: 20px;"></p>
+          <button type="submit" class="btn btn-primary">Register</button>
+          <button type="button" class="btn btn-danger" onclick="cancelReg()">Cancel</button>
         </form>
     </dialog> 
     <dialog id="projectRegDialog">  
@@ -159,8 +174,20 @@
             <input type="text" class="form-control" id="project-overview" name="project-overview" placeholder="Enter Project Overview">
         </div>
         <div class="mb-3">
+            <label for="project-overview" class="form-label">Classification</label>
+            <input type="text" class="form-control" id="classification" name="classification" placeholder="Enter Project Classification">
+        </div>
+        <div class="mb-3">
+            <label for="project-overview" class="form-label">Project Finance</label>
+            <input type="text" class="form-control" id="projectFinance" name="projectFinance" placeholder="Enter Project Finance">
+        </div>
+        <div class="mb-3">
             <label for="sub-contractors" class="form-label">Sub-Contractors</label>
             <input type="text" class="form-control" id="sub-contractors" name="sub-contractors" placeholder="Enter Sub-Contractor(s).Separate with comma">
+        </div>
+        <div class="mb-3">
+            <label for="section" class="form-label">Section</label>
+            <input type="text" class="form-control" id="section" name="section" placeholder="Enter project sectione e.g upstream or midstream">
         </div>
 
         <!-- Client (SNEPCo) Personnel Section -->
@@ -242,7 +269,7 @@
         </div>
         <p id="projectSaveStatus"></p>
         <button type="submit" id="projectRegSubmit" class="btn btn-primary mb-3">Submit</button>
-        <button type="button" id="projectRegCancel" class="btn btn-primary mb-3" onclick="closeProjectReg()">Cancel</button>
+        <button type="button" id="projectRegCancel" class="btn btn-danger mb-3" onclick="closeProjectReg()">Cancel</button>
         </form>      
     </dialog>  
     <dialog id="projectFindDialog">
@@ -254,13 +281,31 @@
                     <input class="form-control" type="number" id="projectFindId" name="projectId" placeholder="Enter Project ID" required>
                     <p class="m-2 text-light" id="projectFindMsg"></p>
                 </div>
-                    <button class = "mt-3 mb-1" type="submit" id = "submitFindId">Find</button>
-                    <button class = "mt-3 mb-1 mx-3" type="button" id = "cancelFindId" onclick="closeFind()">Cancel</button>            
+                    <button class = "mt-3 mb-1 btn btn-primary" type="submit" id = "submitFindId">Find</button>
+                    <button class = "mt-3 mb-1 mx-3 btn btn-danger" type="button" id = "cancelFindId" onclick="closeFind()">Cancel</button>            
                 </div>
             </div>
         </form>
     </dialog>
     <dialog id="projectUpdateDialog">
+    </dialog>
+    <dialog id="deleteProjectDialog" class="delete">
+        <h2>Enter Project ID</h2>
+        <p>Deletion is permanent</p>
+        <form id="deleteProjectForm">
+            <div class="container-fluid p-3">
+                <div>
+                    <label for="deleteProject">Project ID</label>
+                    <input class="form-control" type="number" id="deleteProjectId" name="projectId" placeholder="Enter Project ID" required>
+                    <p class="m-2 text-light" id="projectDeleteMsg"></p>
+                </div>
+                    <button class = "mt-3 mb-1 btn btn-danger" type="submit" id = "submitDeleteId">Delete</button>
+                    <button class = "mt-3 mb-1 mx-3 btn btn-primary" type="button" id = "cancelDeleteId" onclick="closeDeleteProject()">Cancel</button>            
+                </div>
+            </div>
+        </form>
+    </dialog>
+    <dialog id="daleteWarningDialog" class="delete">        
     </dialog>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">        
     </script>

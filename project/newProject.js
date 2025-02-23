@@ -25,23 +25,6 @@ function validateDates(awardDateStr, startDateStr, completionDateStr) {
   return null;
 }
 
-function combineCurrencyValue(currency, value) {
-  if (!value) {
-    return null;
-  }
-  return currency + value;
-}
-
-function combineContractValue(min, max) {
-  if (!min) {
-    return null;
-  }
-  if (max) {
-    return "$" + min + "-" + "$" + max;
-  }
-  return "$" + min;
-}
-
 
 router.post('/', async (req, res) => {
   try {
@@ -88,6 +71,7 @@ router.post('/', async (req, res) => {
       majorMilestones: req.body.milestones,
       projectOverview: req.body["project-overview"],
       subContractors: req.body["sub-contractors"],
+      section: req.body.section,
 
       // Client (SNEPCo) Personnel
       projectManagerNameClient: req.body["project-manager-name-client"],
@@ -135,6 +119,48 @@ router.get("/findProject/:id", async (req, res) => {
   } catch (error) {
     console.error("Error finding project:", error);
     res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.patch('/project-update', async (req, res) => {
+  try {
+    const projectId = req.query.projectId;
+    const updateData = req.body;
+
+    if (!projectId) {
+      return res.status(400).json({ success: false, message: "Project ID is required." });
+    }
+
+    console.log("Updating project with projectId:", projectId);
+
+    const updatedProject = await Project.findOneAndUpdate(
+      { projectId: String(projectId) },  
+      { $set: updateData },    
+      { new: true }           
+    );
+
+    if (!updatedProject) {
+      return res.status(404).json({ success: false, message: "Project not found." });
+    }
+
+    res.json({ success: true, message: "Project updated successfully"});
+  } catch (error) {
+    console.error("Error updating project:", error);
+    res.status(500).json({ success: false, message: "Server error while updating project." });
+  }
+});
+
+router.post("/delete", async (req, res) => {
+  try {
+    const { projectId } = req.body;
+    const deletedProject = await Project.findOneAndDelete({ projectId: String(projectId) });
+    if (deletedProject) {
+      res.json({ success: true, message: "Project deleted successfully." });
+    } else {
+      res.status(404).json({ success: false, error: "Project not found." });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 

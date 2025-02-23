@@ -22,6 +22,7 @@ body,html{
     z-index: 5;
     background-color: rgba(255,255, 255,0.6);
     overflow: hidden;
+    height: 100vh;
 }
 .sideBar{
     height:100%;
@@ -37,14 +38,15 @@ body,html{
     overflow-y: scroll;
 }
 
-#oilHead, #project-head,.more {
+#oilHead, #project-head {
     color:#526fbd
 }
-.sideBar ul {
-    list-style-position: inside; 
-    padding-left: 0; 
-    margin-left: 0; 
-    border-bottom: 3px solid black
+
+.more{
+    color: #031b5e;
+}
+li{
+    font-size: 13px
 }
 
 #lastUl {
@@ -53,13 +55,7 @@ body,html{
 #oilHead{
     font-size:20px
 }
-.sideBar p{
-    margin-left: 10px;
-    margin-top:-10px
-}
-li{
-    font-size: 13px
-}
+
 .listHead{
     font-size: 16px;
     text-align: left;
@@ -67,15 +63,16 @@ li{
     padding: 0;
     font-weight: bold; 
 }
-.hj{
-    overflow:visible;
+.rightcol {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
-.hj::after {
-    content: "";
-    flex-grow: 1; }
+
+.hj {
+    flex: 1; 
+    min-height: 0;
+}
 .sideBarimg{
     max-height: 250px;
     margin: auto
@@ -86,6 +83,7 @@ footer{
     background-color: #44537c;
     margin-top: auto;
     position:relative;
+    flex-shrink: 0;
 }
 .mainGrid{
     min-height:100vh;
@@ -245,7 +243,7 @@ a {
  }
  @media (min-width : 992px) {
     .moreDiv {
-        width: 70%;
+        width: 58%;
     }
  }
  
@@ -440,3 +438,45 @@ font-weight: bold;
 font-weight: bold;
 color: #333;
 }
+
+.container-ul {
+    max-width: 350px; /* Keeps it compact */
+    background: rgba(255, 255, 255, 0.1); /* Light transparent white */
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px); /* Blurred effect */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Headings */
+.listHead {
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff; /* White for contrast */
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    padding-bottom: 5px;
+    margin-top: 15px;
+    background-color: gray;
+    border-radius: 10px;
+}
+
+/* List styling */
+ul {
+    list-style: none;
+    padding-left: 0;
+    color: #fff; /* White text */
+}
+
+.sideBarli {
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 5px 0;
+    font-weight: bold;
+    color: black;
+    text-shadow: 1px 1px 0px white, 
+    -1px -1px 0px white, 
+    -1px 1px 0px white, 
+    1px -1px 0px white;
+}
+

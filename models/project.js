@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const projectSchema = new mongoose.Schema({
-  projectId: { type: String },
+  projectId: { type: String, required: true, unique: true },
   projectName: { type: String },
   location: { type: String },
   capacity: { type: String },
@@ -22,7 +22,13 @@ const projectSchema = new mongoose.Schema({
   localContentPlans: { type: String },
   majorMilestones: [{ type: String }],
   projectOverview: { type: String },
+  classification: { type: String },
+  projectFinance: { type: String },
   subContractors: { type: String },
+  section: { 
+    type: String,
+    set: value => value ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : value
+  },
   projectManagerNameClient: { type: String },
   projectManagerTelephoneClient: { type: String },
   projectManagerEmailClient: { type: String },

@@ -7,7 +7,7 @@ body{
 dialog {
   font-family: 'Poppins', sans-serif;
 }
-#adminLoginDialog, #adminSignUpDialog, #projectFindDialog { 
+#adminLoginDialog, #adminSignUpDialog, #projectFindDialog, .delete { 
   background: #44537c; 
   padding: 20px; 
   border-radius: 15px; 
@@ -86,7 +86,7 @@ p#message {
     border: none
 }
 
-.loginButtons button, #projectFindDialog button{
+.loginButtons button, #projectFindDialog button, .delete Button{
   border-radius: 5px;
 }
 

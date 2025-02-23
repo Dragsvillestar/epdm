@@ -21,7 +21,7 @@ html(lang="en")
                     i your reliable and realtime energy projects market place
       nav.navbar.navbar-expand-lg.bg-dark.navbar-dark.pb-2#topnav
         .container
-          button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navmenu")
+          button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#offcanvas")
             span.navbar-toggler-icon
           .collapse.navbar-collapse#navmenu
             ul.navbar-nav.ms-auto
@@ -41,16 +41,44 @@ html(lang="en")
         .sideBar
           .navbar.d-flex.justify-content-center#navbar-div2
             ul.navbar-nav.text-center.flex-column.p-2
-              li.nav-item
+              li.nav-item.menu
                 a.nav-link(href="/home") Home
-              li.nav-item
+              li.nav-item.menu
                 a.nav-link#projectsmenu(href="#") Projects
-              li.nav-item
+              li.nav-item.menu
                 a.nav-link(href="#") News
-              li.nav-item
+              li.nav-item.menu
                 a.nav-link(href="#") Subscriptions
-              li.nav-item
+              li.nav-item.menu
                 a.nav-link(href="#") Favourites
+        div.offcanvas.offcanvas-start.d-sm-none(tabindex="-1" id="offcanvas" data-bs-backdrop="false")
+          div.offcanvas-header
+            button.navbar-toggler(type="button" data-bs-toggle="collapse" data-bs-target="#offcanvas")
+          div.offcanvas-body
+            div.navbar.d-flex.justify-content-center(id="navbar-div2")
+              ul.navbar-nav.text-center.flex-column.p-2
+                li.nav-item
+                  a.nav-link(href="/home") Home
+                li.nav-item
+                  a.nav-link#offProjectsmenu(href="") Projects
+                li.nav-item
+                  a.nav-link(href="") News
+                li.nav-item
+                  a.nav-link(href="") Subscriptions
+                li.nav-item
+                  a.nav-link(href="") Favourites
+                li.nav-item.dropdown.mx-3.fw-bold.topnavItem
+                  a.nav-link.dropdown-toggle.f-2(href="#", role="button", data-bs-toggle="dropdown", aria-expanded="false") ⚙️ Settings
+                  ul.dropdown-menu
+                    li
+                      a.dropdown-item#offProfile(href="#") Profile
+                    li
+                      a.dropdown-item(href="#") Manage Account
+                    li
+                      a.dropdown-item#offLogOut(href="#" ) Log Out
+                li.nav-item.fw-bold.topnavItem
+                  a.nav-link#offHelpButton(href="#") ❓ Help
+                  a.nav-link#offSubscribeButton(href="#") Subscribe
         .projects.p-2
           h2#welcomeMsg Welcome, #{username}
           .content-div.p-3

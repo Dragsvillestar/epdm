@@ -22,35 +22,44 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
-router.post('/register', async (req, res, next) => {
-    try {
-      const { username, password } = req.body;
-  
-      // Validate input
-      if (!username || !password) {
-        return res.status(400).json({ error: 'Username and password are required' });
-      }
-  
-      // Check if an admin with the same username already exists
-      const existingAdmin = await Admin.findOne({ username });
-      if (existingAdmin) {
-        return res.status(400).json({ error: 'Username already exists' });
-      }
-  
-      const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
-  
-      const newAdmin = new Admin({
-        username,
-        password: hashedPassword
-      });
-  
-      await newAdmin.save();
-  
-      return res.status(201).json({ message: 'Admin registered successfully' });
-    } catch (err) {
-      next(err);
+router.post("/register", async (req, res) => {
+  try {
+    const { newAdminUsername, newAdminPassword, currentAdminUsername, currentAdminPassword } = req.body;
+
+    // Check if current admin exists
+    const currentAdmin = await Admin.findOne({ username: currentAdminUsername });
+    if (!currentAdmin) {
+      return res.status(401).json({ error: "Current admin not found." });
     }
-  });
+
+    // Verify current admin's password
+    const isMatch = await bcrypt.compare(currentAdminPassword, currentAdmin.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: "Invalid current admin credentials." });
+    }
+
+    // Check if a new admin with the given username already exists
+    const existingNewAdmin = await Admin.findOne({ username: newAdminUsername });
+    if (existingNewAdmin) {
+      return res.status(400).json({ error: "New admin username already exists." });
+    }
+
+    // Hash the new admin's password
+    const hashedPassword = await bcrypt.hash(newAdminPassword, 10);
+
+    // Create and save the new admin document
+    const newAdmin = new Admin({
+      username: newAdminUsername,
+      password: hashedPassword
+    });
+
+    await newAdmin.save();
+
+    res.status(201).json({ success: true, message: "New admin registered successfully." });
+  } catch (error) {
+    console.error("Error during admin registration:", error);
+    res.status(500).json({ error: "Server error during registration." });
+  }
+});
   
 module.exports = router;
