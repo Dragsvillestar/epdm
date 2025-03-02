@@ -18,11 +18,24 @@ html(lang="en")
                 .d-flex.flex-column
                   h1.mb-0.fw-bold ENERGY PROJECTS DATA MEDIA LTD.
                   p.p-2.rounded#logocaption
-                    i your reliable and realtime energy projects market place
+                    i your reliable and realtime energy projects marketplace
       nav.navbar.navbar-expand-lg.bg-dark.navbar-dark.pb-2#topnav
         .container
-          button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#offcanvas")
-            span.navbar-toggler-icon
+          div.d-flex.align-items-center
+            button.navbar-toggler(type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas")
+              span.navbar-toggler-icon
+            #searchContainer.d-flex.align-items-center.ms-3
+              label(for="searchCategory") Search by:
+              select#searchCategory.ms-2
+                option(value="Project ID") Project ID
+                option(value="project name") Project Name
+                option(value="client") Client
+                option(value="location") Location
+                option(value="main Contractor") Main Contractor
+              .input-group.ms-2
+                input#searchInput.form-control(type="text", placeholder="Enter search term...")
+                button#searchButton.btn.btn-primary(type="button")
+                  i.bi.bi-arrow-right                                               
           .collapse.navbar-collapse#navmenu
             ul.navbar-nav.ms-auto
               li.nav-item.dropdown.mx-3.fw-bold.topnavItem
@@ -53,7 +66,6 @@ html(lang="en")
                 a.nav-link(href="#") Favourites
         div.offcanvas.offcanvas-start.d-sm-none(tabindex="-1" id="offcanvas" data-bs-backdrop="false")
           div.offcanvas-header
-            button.navbar-toggler(type="button" data-bs-toggle="collapse" data-bs-target="#offcanvas")
           div.offcanvas-body
             div.navbar.d-flex.justify-content-center(id="navbar-div2")
               ul.navbar-nav.text-center.flex-column.p-2
@@ -69,7 +81,7 @@ html(lang="en")
                   a.nav-link(href="") Favourites
                 li.nav-item.dropdown.mx-3.fw-bold.topnavItem
                   a.nav-link.dropdown-toggle.f-2(href="#", role="button", data-bs-toggle="dropdown", aria-expanded="false") ⚙️ Settings
-                  ul.dropdown-menu
+                  ul.dropdown-menu.offDropdown-menu
                     li
                       a.dropdown-item#offProfile(href="#") Profile
                     li
@@ -78,6 +90,7 @@ html(lang="en")
                       a.dropdown-item#offLogOut(href="#" ) Log Out
                 li.nav-item.fw-bold.topnavItem
                   a.nav-link#offHelpButton(href="#") ❓ Help
+                li.nav-item.fw-bold.topnavItem
                   a.nav-link#offSubscribeButton(href="#") Subscribe
         .projects.p-2
           h2#welcomeMsg Welcome, #{username}

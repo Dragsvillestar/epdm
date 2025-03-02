@@ -29,8 +29,14 @@ dialog {
   padding: 20px; 
   border-radius: 15px; 
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
-  width: 40%;
   min-width: 500px;
+}
+
+@media (max-width: 576px) {
+  #projectRegDialog, #projectUpdateDialog{
+    min-width: auto; /* or a smaller value */
+    max-width: 350px;
+  }
 }
 
 input { 

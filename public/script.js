@@ -351,15 +351,14 @@ const signUp = () => {
       <div class="projectUl">                           
         <ul style="list-style-position: inside;">
           <h5 class="fw-bold mb-3" id="project-head">OIL AND GAS PROJECTS</h5>
-          <li class="fw-bold m-3">NLNG Train 7 Project</li>
-          <li class="fw-bold m-3">AKK Gas Pipeline Project</li>
-          <li class="fw-bold m-3">Dangote 650,000bpd Refinery Plant Project</li>
-          <li class="fw-bold m-3">Bonga SWA Field Development Project(FPSO Package)</li>
-          <li class="fw-bold m-3">Bonga SWA Field Development Project(SPS Package)</li>
+          <li class="fw-bold m-3 sideBarli">NLNG Train 7 Project</li>
+          <li class="fw-bold m-3 sideBarli">AKK Gas Pipeline Project</li>
+          <li class="fw-bold m-3 sideBarli">Shell Southern Swamp AGS 3B Project</li>
+          <li class="fw-bold m-3 sideBarli">Preowei Deepwater Dev. Project</li>
         </ul>
       </div>
     
-      <div class="row mb-4 moreDiv">
+      <div class="row mb-2 moreDiv">
         <div class="col-4"></div>
         <div class="col-4"></div>
         <div class="col-4">
@@ -367,18 +366,29 @@ const signUp = () => {
         </div>
       </div>
       
-      <section id="toolsSection" class="py-5">
+      <section id="toolsSection" class="py-2">
         <div class="container">
           <div class="row align-items-center">
             <div class="col-lg-8">
-              <h2 class="display-5 text-light fw-bold mb-3">TOOLS FOR SUCCESS</h2>
+              <h2 class="display-5 text-light fw-bold mb-2">TOOLS FOR SUCCESS</h2>
               <p class="lead text-light">
-                EPDM tracks thousands of energy projects and provides real-time, accurate, and reliable resources for companies seeking new business opportunities and up-to-date industry insights. EPDM delivers the latest information on planned, ongoing, and completed energy projects to empower your success.
+                EPDM tracks thousands of energy projects and provides real-time, accurate, and reliable resources for companies seeking new business opportunities and up-to-date industry insights. EPDM delivers the latest information on planned, ongoing, and future energy projects to empower your success.
               </p>
             </div>
           </div>
         </div>
       </section>
+      
+      <div class="input-group input-group-sm mt-2 mb-1 d-flex justify-content-end">
+        <span class="input-group-text" id="searchSpan">Search</span>
+        <input type="text" class="form-control" id="searchInput">
+      </div>
+
+      <div class="input-group input-group-sm mt-2 mb-1 d-flex justify-content-end">
+        <button class="btn" style="background-color: #44537c; color: white;">Request a Demo</button>
+      </div>
+
+    </div>  
       `;
 
 const aboutUs = () => {

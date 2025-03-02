@@ -130,10 +130,13 @@ position: relative;  /* Added to ensure z-index works */
     border-radius: 5px;
     box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4);
     transition: all 0.2s ease-in-out;
+    width: auto;
+    height: 40px;
+    margin: 5px;
+    color: white;
 }
 
 .menu .nav-link {
-    width: 100%;
     height: 60px;
     font-size: large;
     color: white;
@@ -143,6 +146,15 @@ position: relative;  /* Added to ensure z-index works */
 .dropdown-menu {
     background-color: rgb(148, 153, 153);
 }
+
+.offDropdown-menu{
+    background-color: rgb(2, 22, 22);
+}
+.offDropdown-menu li{
+    display: block !important;
+    width: inherit;
+}
+
 .dropdown-menu li{
     display: inline-block;
     text-decoration: none;
@@ -152,13 +164,13 @@ position: relative;  /* Added to ensure z-index works */
     transition: all 0.2s ease-in-out;
 }
 
-.nav-link:hover, .dropdown-menu a:hover, .dropdown-menu li:hover {
+.nav-link:hover, .dropdown-menu a:hover, .dropdown-menu li:hover, .nav-linkoff:hover, .offDropdown-menu a:hover, .offDropdown-menu li:hover {
     background: linear-gradient(to bottom, #ecf1f5 0%, #1c6691 100%);
     transform: translateY(2px);
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-.nav-link:active {
+.nav-link:active, .nav-link-off:active {
     transform: translateY(4px);
     box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.6);
 }
@@ -292,7 +304,7 @@ label[for="all"], label[for="upstream"], label[for="midstream"] {
 }
 
 #offcanvas {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     left: 0;
     height: 70vh;
@@ -305,7 +317,9 @@ label[for="all"], label[for="upstream"], label[for="midstream"] {
     flex-shrink: 0;
     background: linear-gradient(to bottom, rgb(224, 224, 228) 20%,
     rgb(79, 82, 83) 70%, 
-    rgb(127, 128, 129) 100%)
+    rgb(127, 128, 129) 100%);
+    display: flex;
+    flex-direction: column;
 }
 
 @media (max-width: 576px) {
@@ -314,12 +328,31 @@ label[for="all"], label[for="upstream"], label[for="midstream"] {
     }
   }
 
+.offDropdown-menu {
+    background-color: rgb(148, 153, 153);
+}
 
-#offcanvas .nav-link {
-    max-width: 100%;
-    height: 40px;
-    font-size:medium;
+#searchContainer label{
+    font-weight: bold;
+}
+
+#searchCategory{
+    background-color: rgb(148, 153, 153);
     color: white;
-    margin: 5px;
-    display: block;
+    width: 100px;
+    font-weight: 700;
+    border-radius: 5px;
+}
+
+#searchButton {
+    border: 2px solid white;
+}
+
+.navbar-toggler-icon{
+    width: 30px;
+    margin: 0;
+}
+
+.navbar-toggler {
+    padding: 0 !important;
 }

@@ -27,13 +27,13 @@
                         </div>
                         <div class="container-ul mx-auto">
                           <h6 class="listHead text-center">UPSTREAM</h6>
-                          <ul class="m-3 mt-0 text-center">
+                          <ul class="mx-3 mt-0 mb-0 text-center">
                             <li class="sideBarli">Addax</li>
                             <li class="mb-0 sideBarli">Agip</li>
                             <li class="mb-0 sideBarli">Exxon</li>
                             <p class="">.......</li>
                           </ul>
-                          <h6 class="listHead text-center">MIDSTREAM</h6>
+                          <h6 class="listHead text-center mt-0">MIDSTREAM</h6>
                           <ul class="m-3 mt-0 text-center">
                             <li class="sideBarli">NLNG Ltd</li>
                             <li class="mb-0 sideBarli">NNPC</li>
@@ -63,11 +63,11 @@
                                   <img  class = "img-fluid mx-2" id = "headerlogo" src="https://raw.githubusercontent.com/Dragsvillestar/new-git/refs/heads/master/IMG-20250125-WA0011%20(1).jpg" alt="">                            
                                   <h1>ENERGY PROJECTS DATA MEDIA LTD.</h1>                                  
                                 </div>
-                                  <p class="p-2 rounded mt-2" id = "logocaption"><i>your reliable and realtime energy projects data market place</i></p>
+                                  <p class="p-2 rounded mt-2" id = "logocaption"><i>your reliable and realtime energy projects data marketplace</i></p>
                                   <div class="d-flex justify-content-center">
-                                    <h6 class="text-center reg">Registered member? <a class="text-danger" id = "loginLink" onclick="openDialog()">Log in</a>
+                                    <h6 class="text-center mx-2">Registered member? <a class="text-danger" id = "loginLink" onclick="openDialog()">Log in</a>
                                     </h6>                                    
-                                    <h6 class="text-center">Not a member? <a id = "signUpLink" class="text-danger" onclick="openReg()">Sign Up</a></h6>     
+                                    <h6 class="text-center mx-2">Not a member? <a id = "signUpLink" class="text-danger" onclick="openReg()">Sign Up</a></h6>     
                                   </div>                                                                  
                                 </div>
                               <dialog id = "bioDialog">
@@ -151,7 +151,7 @@
                               </dialog>
                               <dialog id = "contactUsDialog">
                                 <h2>Contact Us</h2>
-                                <form action="/submit" method="POST">
+                                <form id="contactUsForm" action="/submit" method="POST">
                                   <div class="mb-3">
                                     <label for="name" class="form-label">Full Name</label>
                                     <input type="text" class="form-control" id="contactUsName" name="name" required>
@@ -164,10 +164,12 @@
                                     <label for="message" class="form-label">Message</label>
                                     <textarea class="form-control" id="contactUsMessage" name="message" rows="4" required></textarea>
                                   </div>
-                                  <button class="btn btn-primary" id = "contactUsCancel">Cancel</button>
-                                  <button type="submit" id = "contactUsSubmit" class="btn btn-primary">Submit</button>
+                                  <div class="d-flex justify-content-between mb-2">
+                                    <button class="btn btn-primary" id = "contactUsCancel">Cancel</button>
+                                    <button type="submit" id = "contactUsSubmit" class="btn btn-primary">Submit</button>
+                                  </div>                                  
                                 </form>
-                                <div class="contactCard m-3 mx-auto">
+                                <div class="contactCard mx-auto">
                                   <h6>Or you can reach us directly on</h6>
                                   <h2>Energy Projects Data Media Limited</h2>
                                   <p><strong>Suite No 16, First Floor, Jabita Court,</strong></p>

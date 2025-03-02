@@ -22,7 +22,6 @@ body,html{
     z-index: 5;
     background-color: rgba(255,255, 255,0.6);
     overflow: hidden;
-    height: 100vh;
 }
 .sideBar{
     height:100%;
@@ -41,12 +40,10 @@ body,html{
 #oilHead, #project-head {
     color:#526fbd
 }
-
-.more{
-    color: #031b5e;
-}
-li{
-    font-size: 13px
+.sideBar ul {
+    list-style-position: inside; 
+    padding-left: 0; 
+    margin-left: 0; 
 }
 
 #lastUl {
@@ -55,7 +52,13 @@ li{
 #oilHead{
     font-size:20px
 }
-
+.sideBar p{
+    margin-left: 10px;
+    margin-top:-10px
+}
+li{
+    font-size: 13px
+}
 .listHead{
     font-size: 16px;
     text-align: left;
@@ -63,15 +66,19 @@ li{
     padding: 0;
     font-weight: bold; 
 }
-.rightcol {
+
+.rightcol{
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    overflow-y: visible;
 }
 
-.hj {
-    flex: 1; 
-    min-height: 0;
+.hj{
+    overflow:visible;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 .sideBarimg{
     max-height: 250px;
@@ -82,8 +89,11 @@ footer{
     height: 70px;
     background-color: #44537c;
     margin-top: auto;
-    position:relative;
+    position:relative;    
     flex-shrink: 0;
+    align-self: flex-end;
+    width: 100%;
+
 }
 .mainGrid{
     min-height:100vh;
@@ -99,7 +109,7 @@ footer{
 .header-container {
     background: linear-gradient(to right, rgb(224, 224, 228) 20%,
     rgb(79, 82, 83) 70%, 
-    rgba(0, 10, 205, 0.05) 80% 
+    rgba(0, 10, 205, 0.05) 100% 
 );
 }
 .b-img{
@@ -129,9 +139,7 @@ footer{
     line-height: 1;
     margin-top: -10px;
 }
-.reg{
-    margin-right:90px
-}
+
 #logocaption {
     background: white;
     width:fit-content;
@@ -146,7 +154,9 @@ footer{
 }
 .more{
     font-size: 11px;
-    margin-right:320px;
+    margin-right:320px;    
+    color: #031b5e;
+
 }
 
 #searchInput{
@@ -197,22 +207,25 @@ a {
     border-radius: 10px;
 }
 
-#regDialog{
+#regDialog {
     width: 40% !important;
     max-width: 500px !important;
     min-width: 400px !important;
 }
     
 @media (min-width: 992px) {
-    #loginDialog, #contactUsDialog {
+    #loginDialog, #contactUsDialog  {
         width:30%
     }
     .header-container {
         background: linear-gradient(to right, rgb(224, 224, 228) 20%,
-        rgb(79, 82, 83) 80%, 
+        rgb(79, 82, 83) 83%, 
         rgba(0, 10, 205, 0.01) 90% 
     );
 }
+    .moreDiv {
+        width: 40%;
+    }
 }
 
  @media (max-width: 992px) {
@@ -237,34 +250,27 @@ a {
     #logocaption{
         margin:5px auto;
     }
-    .reg{
-        margin:5px auto;
-    }
  }
- @media (min-width : 992px) {
-    .moreDiv {
-        width: 58%;
-    }
- }
- 
+  
  @media (max-width:768px){
     .moreDiv{
         width:100%
     }
  }
-#loginDialog, #regDialog, #otpDialog,#contactUsDialog {
+#loginDialog, #regDialog, #otpDialog, #contactUsDialog {
     background-color: rgb(23, 61, 97);
 }
 #usernameSpan, #passwordSpan, #closeLogin, #submitLogin, #closeSignUp, #submitSignUp, #otpSubmit, #otpCancel{
-    background-color: rgb(23, 61, 97);
+    background-color: rgb(23, 61, 97);;
 }
-#closeLogin, #submitLogin, #loginDialog, #closeSignUp, #submitSignUp, #closeBio, #bioDialog, #regDialog, #otpDialog, #otpSubmit, #otpCancel,#contactUsDialog{
+#closeLogin, #submitLogin, #loginDialog, #closeSignUp, #submitSignUp, #closeBio, #bioDialog, #regDialog, #otpDialog, #otpSubmit, #otpCancel, #contactUsDialog {
     border-radius: 5px;
 }
 
 #contactUsDialog{
     color:#f1f1f1;
 }
+
 #subscribeWord{
     color: white;
     font-size: 18px;
@@ -282,12 +288,7 @@ a {
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
   }
-
-#toolsSection {
-    background-color: rgba(68, 83, 124, 0.5);
-    border-radius: 8px;
-
-}
+  
   .subscribe-button:hover {
     background-color: #0056b3;
     transform: scale(1.05);
@@ -317,12 +318,12 @@ a {
 #bioDialog {
     max-width: 80%;
 }
-#signUpForm label, #otpForm label{
+#signUpForm label, #otpForm label, #contactUsForm{
     font-size: 15px;
     color: white;
 }
 
-#signUpForm button, #otpForm button {
+#signUpForm button, #otpForm button, #contactUsForm button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -330,10 +331,10 @@ a {
     font-size: 15px;
     margin-top: 8px;
 }
-#signUpForm input,#otpForm input {
+#signUpForm input,#otpForm input, #contactUsForm input,.contactCard input{
     height: 25px;
 }
-#signUpForm p, #otpForm p {
+#signUpForm p, #otpForm p, #contactUsForm p, .contactCard p {
     font-size: 15px;
 }
 
@@ -394,6 +395,13 @@ opacity: 1;
     outline: none;
   }
 
+#toolsSection {
+background-color: rgba(68, 83, 124, 0.5);
+border-radius: 8px;
+
+}
+
+
 ::-webkit-scrollbar {
     width: 12px; 
     height: 12px; 
@@ -421,6 +429,7 @@ box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 padding: 20px;
 width: 80%;
 text-align: center;
+font-size: 15px;
 }
 .contactCardh2 {
 color: white;

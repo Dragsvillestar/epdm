@@ -388,7 +388,12 @@ function loadProjects(event) {
           Object.entries(project).forEach(([key, value]) => {
             let displayName = fieldMappings[key] || key;
             const li = document.createElement("li");
-            li.classList.add("list-group-item");
+            li.classList.add("list-group-item");  
+
+            const valueStr = (value || "").toString().toLowerCase();
+         
+            li.setAttribute("data-field", displayName.toLowerCase());
+            li.setAttribute("data-value", valueStr);
             li.innerHTML = `<strong>${displayName}:</strong> ${value}`;
             ul.appendChild(li);
           });
@@ -402,6 +407,7 @@ function loadProjects(event) {
           const favCheckbox = document.createElement("input");
           favCheckbox.type = "checkbox";
           favCheckbox.id = "favourite-" + project.projectId;
+          favCheckbox.classList.add("form-check-input", "mb-3");
           favCheckbox.name = "favourite";
 
           const favLabel = document.createElement("label");
@@ -413,18 +419,23 @@ function loadProjects(event) {
           checkboxDiv.appendChild(favLabel);
           checkboxDiv.appendChild(document.createElement("br"));
 
+          const newsGroup = document.createElement("div");
+          newsGroup.classList.add("d-flex", "align-items-center", "gap-2");
+          
           const newsCheckbox = document.createElement("input");
           newsCheckbox.type = "checkbox";
+          newsCheckbox.classList.add("form-check-input");
           newsCheckbox.id = "newsletter-" + project.projectId;
           newsCheckbox.name = "newsletter";
-
+          
           const newsLabel = document.createElement("label");
           newsLabel.htmlFor = newsCheckbox.id;
           newsLabel.textContent = "Subscribe to newsletter";
-          newsLabel.style.marginLeft = "5px";
-
-          checkboxDiv.appendChild(newsCheckbox);
-          checkboxDiv.appendChild(newsLabel);
+          
+          // Append elements
+          newsGroup.appendChild(newsCheckbox);
+          newsGroup.appendChild(newsLabel);
+          checkboxDiv.appendChild(newsGroup);
 
           favCheckbox.addEventListener("change", () => {
             const payload = {
@@ -445,7 +456,7 @@ function loadProjects(event) {
           footerDiv.appendChild(checkboxDiv);
 
           const noteSpan = document.createElement("span");
-          noteSpan.classList.add("text-muted");
+          noteSpan.classList.add("text-muted", "m-0");
           noteSpan.textContent = "Click header to collapse.";
           footerDiv.appendChild(noteSpan);
 
@@ -566,3 +577,53 @@ function subscribePay () {
 };
 
 
+document.getElementById("searchButton").addEventListener("click", function () {
+  const searchQuery = document.getElementById("searchInput").value.trim();
+  const selectedField = document.getElementById("searchCategory").value.toLowerCase();
+
+  if (!searchQuery) {
+   
+    return;
+  }
+
+  const regex = new RegExp(searchQuery, "i");
+
+  const accordionItems = document.querySelectorAll(".accordion-item");
+
+  if (accordionItems.length === 0) {
+    contentDiv.innerHTML = "<p>No projects loaded. Please load projects first.</p>";
+    contentDiv.style.fontSize = "20px";
+    contentDiv.style.color = "white";
+    return; 
+  }
+
+  let visibleCount = 0;
+
+  accordionItems.forEach((accordionItem) => {
+  
+    let matchFound = false;
+  
+    accordionItem.querySelectorAll(".list-group-item").forEach((li) => {
+      const field = li.getAttribute("data-field").toLowerCase();
+      const value = li.getAttribute("data-value");
+  
+      if (field === selectedField && regex.test(value)) {
+        matchFound = true;
+      }
+    });
+  
+    if (matchFound) {
+      accordionItem.style.display = "block";
+      visibleCount++;
+    } else {
+      accordionItem.style.display = "none";
+    }
+  });
+
+  if (visibleCount === 0) {
+    contentDiv.innerHTML = "<p>No results found.</p>";
+    contentDiv.style.fontSize = "20px";
+    contentDiv.style.color = "white";
+
+  }
+  });
