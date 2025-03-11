@@ -88,7 +88,7 @@ router.post("/forgot-password", async (req, res) => {
   user.resetTokenExpiry = Date.now() + 3600000; // 1-hour expiration
   await user.save();
 
-  const resetLink = `http://localhost:3000/admin/reset-password/${resetToken}`;
+  const resetLink = `https://www.energyprojectsdata.com/admin/reset-password/${resetToken}`;
 
   try {
       const info = await transporter.sendMail({
