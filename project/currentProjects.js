@@ -150,4 +150,27 @@ router.get('/getUserSubscribed', async (req, res) => {
   }
 });
 
+router.post("/view", async (req, res) => {
+  const { projectId } = req.body;
+  try {
+    let project = await Project.findOne({ projectId });
+
+    if (!project) {
+      return res.status(404).json({ error: "Project not found" });
+    }
+
+    // Ensure viewCount exists and is a number
+    project.viewCount = Number(project.viewCount) || 0;
+
+    project.viewCount += 1; // Increment the view count
+    await project.save(); 
+    console.log(`Updated View Count: ${project.viewCount}`);
+    res.json({ viewCount: project.viewCount });
+  } catch (error) {
+    console.error("Error updating project views:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
 module.exports = router;

@@ -27,10 +27,18 @@ const newProjectRoute = require("./project/newProject");
 const adminRoute = require("./project/adminlogin");
 const paymentRoute = require("./controllers/payment");
 const zohoRoute = require("./controllers/zoho");
-const currentProjectsRoute = require("./project/currentProjects")
+const currentProjectsRoute = require("./project/currentProjects");
+const http = require("http");
+const { Server } = require("socket.io");
+const GlobalStats = require("./models/globalStat");
+
 
 
 const app = express();
+
+
+const server = http.createServer(app); 
+const io = new Server(server);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
@@ -152,7 +160,7 @@ app.post("/forgot-password", async (req, res) => {
   user.resetTokenExpiry = Date.now() + 3600000; // 1-hour expiration
   await user.save();
 
-  const resetLink = `https://www.energyprojectsdata.com/reset-password/${resetToken}`;
+  const resetLink = `http://localhost:3000/reset-password/${resetToken}`;
 
   try {
       const info = await transporter.sendMail({
@@ -224,23 +232,33 @@ app.post("/reset-password/:token", async (req, res) => {
     }
 });
 
-app.get('/projects', async (req, res) => {
-  try {
-    if (!req.user) {
-      return res.status(401).json({ error: "Not authorized" });
-    }
-
-    const hasActiveSubscription = req.user.subscribed && req.user.subscriptionExpiry && req.user.subscriptionExpiry > Date.now();
-    
-    if (!hasActiveSubscription) {
-      return res.json({ subscription: false });
-    }
-
-    const projects = await Project.find();
-    res.status(200).json(projects);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+async function ensureGlobalStats() {
+  let stats = await GlobalStats.findOne();
+  if (!stats) {
+    stats = new GlobalStats();
+    await stats.save();
   }
+  return stats;
+}
+
+io.on("connection", async (socket) => {
+  console.log("A user connected");
+
+  let stats = await ensureGlobalStats();
+
+  // Send the current total views to the newly connected user
+  socket.emit("viewCountUpdate", stats.totalViews);
+
+  socket.on("projectViewed", async () => {
+    stats.totalViews += 1;
+    await stats.save(); 
+
+    io.emit("viewCountUpdate", stats.totalViews); // Broadcast updated count
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
+  });
 });
 
 
@@ -264,4 +282,4 @@ app.get('/logout', (req, res) => {
 
 // Start Server
 const PORT = 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

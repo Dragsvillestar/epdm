@@ -390,6 +390,7 @@ document.getElementById("offProjectsmenu").addEventListener("click", (event) => 
 
 function loadProjects(event) {
   event.preventDefault();
+  socket.emit("projectViewed");
   document.getElementById("welcomeMsg").innerHTML = ""; // Clear existing content
 
   // Create checkboxes for filtering
@@ -419,7 +420,23 @@ function loadProjects(event) {
     filterDiv.appendChild(label);
   });
 
-  document.getElementById("welcomeMsg").appendChild(filterDiv);
+  const viewCountP = document.createElement("p");
+  viewCountP.id = "viewCount";
+  viewCountP.style.color = "white";
+  viewCountP.style.fontSize = "20px";
+  viewCountP.textContent = "Views: 0"; // Default text
+
+  // Add a wrapper div to position elements correctly
+  const headerDiv = document.createElement("div");
+  headerDiv.style.display = "flex";
+  headerDiv.style.justifyContent = "space-between";
+  headerDiv.style.alignItems = "center";
+  headerDiv.style.width = "100%";
+
+  headerDiv.appendChild(filterDiv); // Filters stay on the left
+  headerDiv.appendChild(viewCountP); // View count moves to the right
+
+  document.getElementById("welcomeMsg").appendChild(headerDiv);
 
   fetch("/projects")
     .then(response => response.json())
@@ -477,7 +494,7 @@ function loadProjects(event) {
         displayedProjects.forEach((project, index) => {
           const accordionItem = document.createElement("div");
           accordionItem.classList.add("accordion-item");
-
+          
           const headerId = "heading" + index;
           const collapseId = "collapse" + index;
           const accordionHeader = document.createElement("h2");
@@ -485,7 +502,8 @@ function loadProjects(event) {
           accordionHeader.id = headerId;
 
           const accordionButton = document.createElement("button");
-          accordionButton.classList.add("accordion-button", "collapsed");
+          accordionButton.classList.add("accordion-button", "collapsed");          
+          accordionButton.setAttribute("data-project-id", project.projectId || "unknown");
           accordionButton.type = "button";
           accordionButton.setAttribute("data-bs-toggle", "collapse");
           accordionButton.setAttribute("data-bs-target", "#" + collapseId);
@@ -494,7 +512,7 @@ function loadProjects(event) {
           accordionButton.innerHTML = `<strong>${project.projectName || project.projectId}</strong>`;
           accordionHeader.appendChild(accordionButton);
           accordionItem.appendChild(accordionHeader);
-
+          
           const collapseDiv = document.createElement("div");
           collapseDiv.id = collapseId;
           collapseDiv.classList.add("accordion-collapse", "collapse");
@@ -508,17 +526,28 @@ function loadProjects(event) {
           ul.classList.add("list-group", "mb-3");
 
           Object.entries(project).forEach(([key, value]) => {
-            let displayName = fieldMappings[key] || key;
-            const li = document.createElement("li");
-            li.classList.add("list-group-item");  
+            if (key !== 'viewCount'){
+              let displayName = fieldMappings[key] || key;
+              const li = document.createElement("li");
+              li.classList.add("list-group-item");  
 
-            const valueStr = (value || "").toString().toLowerCase();
-         
-            li.setAttribute("data-field", displayName.toLowerCase());
-            li.setAttribute("data-value", valueStr);
-            li.innerHTML = `<strong>${displayName}:</strong> ${value}`;
-            ul.appendChild(li);
+              const valueStr = (value || "").toString().toLowerCase();
+          
+              li.setAttribute("data-field", displayName.toLowerCase());
+              li.setAttribute("data-value", valueStr);
+              li.innerHTML = `<strong>${displayName}:</strong> ${value}`;
+              ul.appendChild(li);
+            };            
           });
+
+          const viewCountP = document.createElement("p");
+          viewCountP.classList.add("view-count");
+          viewCountP.id = `view-count-${project.projectId}`;
+          viewCountP.style.color = "black";
+          viewCountP.style.fontSize = "14px";
+          viewCountP.textContent = `Views: ${project.viewCount || 0}`;
+          
+          accordionBody.appendChild(viewCountP);
           accordionBody.appendChild(ul);
 
           const footerDiv = document.createElement("div");
@@ -772,3 +801,37 @@ document.getElementById("searchButton").addEventListener("click", function () {
 
   }
   });
+
+  const socket = io();
+
+  socket.on("viewCountUpdate", (projectViewCount) => {
+    document.getElementById("viewCount").innerText = `Views: ${projectViewCount}`;
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.body.addEventListener("click", (event) => {
+      if (event.target.classList.contains("accordion-button")) {
+        const projectId = event.target.getAttribute("data-project-id");
+        updateProjectViewCount(projectId, event.target);
+      }
+    });
+  });
+  
+  function updateProjectViewCount(projectId, button) {
+    fetch("/projects/view", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ projectId }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const viewCountElement = document.getElementById(`view-count-${projectId}`);
+        console.log("Server Response:", data); 
+        if (viewCountElement) {
+          viewCountElement.textContent = `Views: ${data.viewCount}`;
+        }
+      })
+      .catch((error) => console.error("Error updating view count:", error));
+  }
+  
+  
