@@ -87,7 +87,7 @@ li{
 footer{
     margin-bottom: -10px;
     height: 70px;
-    background-color: #44537c;
+    background-color: #778ca9;
     margin-top: auto;
     position:relative;    
     flex-shrink: 0;
@@ -100,7 +100,7 @@ footer{
     overflow: visible; 
 }
 .topBar{
-    background-color: #44537c;
+    background-color: #778ca9;
     margin-top: 0px;
     box-sizing: border-box;
     overflow:hidden;
@@ -161,6 +161,7 @@ footer{
 
 #searchInput{
     max-width:200px;
+    border: 2px solid #5C7394 !important;
 }
 .image-area {
     height: 100%
