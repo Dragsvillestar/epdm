@@ -240,13 +240,16 @@ const fieldMappings = {
   projectCoordinatorEmailMainContractor: "Project Coordinator Email (Main Contractor)",
   projectProcurementManagerNameMainContractor: "Procurement Manager Name (Main Contractor)",
   projectProcurementManagerTelephoneMainContractor: "Procurement Manager Telephone (Main Contractor)",
-  projectProcurementManagerEmailMainContractor: "Procurement Manager Email (Main Contractor)"
+  projectProcurementManagerEmailMainContractor: "Procurement Manager Email (Main Contractor)",
+  createdAt: "Created At",
+  updatedAt: "Updated At"
 };
 
 function filterEmptyValues(obj) {
   return Object.entries(obj)
     .filter(([key, value]) =>
       key !== '_id' &&
+      key !== 'subscribersEmails' &&
       key !== 'favUsersEmails' &&           // Remove mongoose id
       key !== '__v' &&           // Optionally remove version key
       value !== null &&
@@ -401,8 +404,11 @@ function loadProjects(event) {
   const filters = [
     { id: "all", label: "All", checked: true },
     { id: "upstream", label: "Upstream", checked: false },
-    { id: "midstream", label: "Midstream", checked: false }
-  ];
+    { id: "midstream", label: "Midstream", checked: false },
+    { id: "downstream", label: "Downstream", checked: false },
+    { id: "service-companies", label: "Service Companies", checked: false },
+    { id: "oem-manufacturers", label: "OEM/Manufacturers", checked: false }
+];
 
   filters.forEach(filter => {
     const checkbox = document.createElement("input");
@@ -478,16 +484,22 @@ function loadProjects(event) {
       accordionDiv.classList.add("accordion");
 
       function updateProjectList() {
-        const allChecked = document.getElementById("all").checked;
-        const upstreamChecked = document.getElementById("upstream").checked;
-        const midstreamChecked = document.getElementById("midstream").checked;
+    const allChecked = document.getElementById("all").checked;
+    const upstreamChecked = document.getElementById("upstream").checked;
+    const midstreamChecked = document.getElementById("midstream").checked;
+    const downstreamChecked = document.getElementById("downstream").checked;
+    const serviceCompaniesChecked = document.getElementById("service-companies").checked;
+    const oemManufacturersChecked = document.getElementById("oem-manufacturers").checked;
 
-        let displayedProjects = filteredData.filter(project => {
-          if (allChecked) return true;
-          if (upstreamChecked && project.section === "Upstream") return true;
-          if (midstreamChecked && project.section === "Midstream") return true;
-          return false;
-        });
+    let displayedProjects = filteredData.filter(project => {
+        if (allChecked) return true;
+        if (upstreamChecked && project.section === "Upstream") return true;
+        if (midstreamChecked && project.section === "Midstream") return true;
+        if (downstreamChecked && project.section === "Downstream") return true;
+        if (serviceCompaniesChecked && project.section === "Service Companies") return true;
+        if (oemManufacturersChecked && project.section === "OEM/Manufacturers") return true;
+        return false;
+    });
 
         accordionDiv.innerHTML = "";
 
@@ -578,10 +590,12 @@ function loadProjects(event) {
           newsCheckbox.classList.add("form-check-input");
           newsCheckbox.id = "newsletter-" + project.projectId;
           newsCheckbox.name = "newsletter";
+          newsCheckbox.style.display ="none";
           
           const newsLabel = document.createElement("label");
           newsLabel.htmlFor = newsCheckbox.id;
           newsLabel.textContent = "Subscribe to newsletter";
+          newsLabel.style.display = "none";
           
           // Append elements
           newsGroup.appendChild(newsCheckbox);
@@ -648,23 +662,38 @@ function loadProjects(event) {
       // Attach event listeners to checkboxes
       filters.forEach(filter => {
         document.getElementById(filter.id).addEventListener("change", () => {
-          if (filter.id === "all") {
-            // If "All" is checked, uncheck others
-            if (document.getElementById("all").checked) {
-              document.getElementById("upstream").checked = false;
-              document.getElementById("midstream").checked = false;
+            if (filter.id === "all") {
+                // If "All" is checked, uncheck all other filters
+                if (document.getElementById("all").checked) {
+                    document.getElementById("upstream").checked = false;
+                    document.getElementById("midstream").checked = false;
+                    document.getElementById("downstream").checked = false;
+                    document.getElementById("service-companies").checked = false;
+                    document.getElementById("oem-manufacturers").checked = false;
+                }
+            } else {
+                // If any other checkbox is checked, uncheck "All"
+                if (
+                    document.getElementById("upstream").checked ||
+                    document.getElementById("midstream").checked ||
+                    document.getElementById("downstream").checked ||
+                    document.getElementById("service-companies").checked ||
+                    document.getElementById("oem-manufacturers").checked
+                ) {
+                    document.getElementById("all").checked = false;
+                }
+    
+                // If none of the specific categories are checked, recheck "All"
+                if (
+                    !document.getElementById("upstream").checked &&
+                    !document.getElementById("midstream").checked &&
+                    !document.getElementById("downstream").checked &&
+                    !document.getElementById("service-companies").checked &&
+                    !document.getElementById("oem-manufacturers").checked
+                ) {
+                    document.getElementById("all").checked = true;
+                }
             }
-          } else {
-            // If any other checkbox is checked, uncheck "All"
-            if (document.getElementById("upstream").checked || document.getElementById("midstream").checked) {
-              document.getElementById("all").checked = false;
-            }
-      
-            // If neither "Upstream" nor "Midstream" is checked, recheck "All"
-            if (!document.getElementById("upstream").checked && !document.getElementById("midstream").checked) {
-              document.getElementById("all").checked = true;
-            }
-          }
       
           updateProjectList();
         });

@@ -453,11 +453,11 @@ const services = () => {
             Energy Projects Data Media Limited with its experienced and sound professionals provides the 
             energy industry the following services:
             </h6>
-            <ul>
-                <li>Energy Projects Tracking</li>
-                <li>Online Energy Projects Data Marketing</li>
-                <li>Energy Consultancy Services </li>
-                <li>Project Management Consulting</li>
+            <ul class="text-dark" style="font-size: 15px;">
+                <li style="font-size: inherit;">Energy Projects Tracking</li>
+                <li style="font-size: inherit;">Online Energy Projects Data Marketing</li>
+                <li style="font-size: inherit;">Energy Consultancy Services</li>
+                <li style="font-size: inherit;">Project Management Consulting</li>
             </ul>
           </div>
         </div>
