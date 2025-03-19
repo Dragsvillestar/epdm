@@ -163,16 +163,17 @@ app.post("/forgot-password", async (req, res) => {
   const resetLink = `https://www.energyprojectsdata.com/reset-password/${resetToken}`;
 
   try {
-      const info = await transporter.sendMail({
-          to: email,
-          subject: "Password Reset",
-          text: `You requested a password reset. Click the link below to reset your password:\n\n${resetLink}\n\nIf you did not request this, please ignore this email.`,
-          html: `
-            <p>You requested a password reset. Click the button below to reset your password:</p>
-            <p><a href="${resetLink}" style="background-color:#007bff;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">Reset Password</a></p>
-            <p>If you did not request this, please ignore this email.</p>
-          `,
-      });    
+    const info = await transporter.sendMail({
+        from: "info@energyprojectsdata.com",
+        to: email,
+        subject: "Password Reset",
+        text: `You requested a password reset. Click the link below to reset your password:\n\n${resetLink}\n\nIf you did not request this, please ignore this email.`,
+        html: `
+          <p>You requested a password reset. Click the button below to reset your password:</p>
+          <p><a href="${resetLink}" style="background-color:#007bff;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">Reset Password</a></p>
+          <p>If you did not request this, please ignore this email.</p>
+        `,
+    });   
 
       res.json({ message: "Reset email sent" });
       console.log("✅ Email sent: " + info.response);
