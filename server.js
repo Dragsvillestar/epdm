@@ -164,7 +164,7 @@ app.post("/forgot-password", async (req, res) => {
 
   try {
     const info = await transporter.sendMail({
-        from: "info@energyprojectsdata.com",
+        from: "EnergyProjectsData <info@energyprojectsdata.com>",
         to: email,
         subject: "Password Reset",
         text: `You requested a password reset. Click the link below to reset your password:\n\n${resetLink}\n\nIf you did not request this, please ignore this email.`,

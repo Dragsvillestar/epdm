@@ -16,7 +16,7 @@ function sendVerificationEmail(email, token) {
 const verificationUrl = `http://localhost:3000/verify-email?token=${token}`;
 
 const mailOptions = {
-    from: "info@energyprojectsdata.com",
+    from: "EnergyProjectsData <info@energyprojectsdata.com>",
     to: email,
     subject: "Verify Your Email",
     html: `

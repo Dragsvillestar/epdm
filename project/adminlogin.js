@@ -91,7 +91,8 @@ router.post("/forgot-password", async (req, res) => {
   const resetLink = `https://www.energyprojectsdata.com/admin/reset-password/${resetToken}`;
 
   try {
-      const info = await transporter.sendMail({
+      const info = await transporter.sendMail({          
+          from: "EnergyProjectsData <info@energyprojectsdata.com>",  
           to: email,
           subject: "Password Reset",
           text: `You requested a password reset. Click the link below to reset your password:\n\n${resetLink}\n\nIf you did not request this, please ignore this email.`,
