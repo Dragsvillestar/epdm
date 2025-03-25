@@ -75,13 +75,13 @@ li{
 }
 
 .hj{
-    overflow:visible;
+    overflow:hidden;
     display: flex;
     flex-direction: column;
     flex: 1;
 }
 .sideBarimg{
-    max-height: 250px;
+    max-height: 200px;
     margin: auto
 }
 footer{

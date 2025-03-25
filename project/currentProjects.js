@@ -16,7 +16,17 @@ router.get('/', async (req, res) => {
     }
 
     const projects = await Project.find();
-    res.status(200).json(projects);
+    const formattedProjects = projects.map(project => {
+      const projectObj = project.toObject();
+      if (projectObj.createdAt) {
+        projectObj.createdAt = projectObj.createdAt.toISOString().split('T')[0];
+      }
+      if (projectObj.updatedAt) {
+        projectObj.updatedAt = projectObj.updatedAt.toISOString().split('T')[0];
+      }
+      return projectObj;
+    });
+    res.status(200).json(formattedProjects);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

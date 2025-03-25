@@ -184,26 +184,30 @@ window.onload = () => {
 };
 
 document.getElementById("adminRegistrationForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const username = document.getElementById("signup-username").value;
-    const password = document.getElementById("signup-password").value;
+  e.preventDefault();
+  const newAdminUsername = document.getElementById("newAdminUsername").value;
+  const newAdminPassword = document.getElementById("newAdminPassword").value;    
+  const newAdminEmail = document.getElementById("newAdminEmail").value;    
+  const currentAdminUsername = document.getElementById("currentAdminUsername").value;    
+  const currentAdminPassword = document.getElementById("currentAdminPassword").value;
 
-    fetch("/admin/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            console.log(data.error);
-            document.getElementById("regmessage").textContent = data.error;
-        } else {
-            console.log(data.message);
-            document.getElementById("regmessage").textContent = data.success;
-        }
-    })
-    .catch(error => console.error("Error:", error));
+  fetch("/admin/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ newAdminUsername, newAdminPassword, newAdminEmail, currentAdminUsername, currentAdminPassword})
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.error) {
+          console.log(data.error);
+          document.getElementById("regmessage").textContent = data.error;
+      } else {
+          console.log(data.message);
+          document.getElementById("regmessage").textContent = data.message;
+          document.getElementById("adminRegistrationForm").reset();
+      }
+  })
+  .catch(error => console.error("Error:", error));
 });
 
 document.getElementById("add-milestone-btn").addEventListener("click", function() {
@@ -615,46 +619,6 @@ deleteProjectForm.addEventListener("submit", (e) => {
     .catch(error => console.error("Error:", error));
 });
 
-document.getElementById("adminRegistrationForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
-
-  // Gather values from the form inputs
-  const newAdminUsername = document.getElementById("newAdminUsername").value;
-  const newAdminPassword = document.getElementById("newAdminPassword").value;  
-  const newAdminEmail = document.getElementById("currentAdminEmail").value;
-  const currentAdminUsername = document.getElementById("currentAdminUsername").value;
-  const currentAdminPassword = document.getElementById("currentAdminPassword").value;
-  
-  const messageElement = document.getElementById("regmessage");
-
-  try {
-    const response = await fetch("/admin/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        newAdminUsername,
-        newAdminPassword,
-        newAdminEmail,
-        currentAdminUsername,
-        currentAdminPassword,        
-      })
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      messageElement.style.color = "lightgreen";
-      messageElement.textContent = data.message;
-    } else {
-      messageElement.style.color = "red";
-      messageElement.textContent = data.error;
-    }
-  } catch (error) {
-    console.error("Error submitting registration:", error);
-    messageElement.style.color = "red";
-    messageElement.textContent = "An error occurred connecting to the server.";
-  }
-});
 
 document.getElementById("eyeIcon").addEventListener("click", function() {
   const isPasswordVisible = document.getElementById("password").type === "text";
