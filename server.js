@@ -46,8 +46,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true // optional, if you're using cookies or auth headers
+  origin: ['http://localhost:5173', "https://energyprojectsdata.onrender.com"],
+  credentials: true 
 }));
 app.set('view engine', 'pug');
 app.set('views', './views/pug');
