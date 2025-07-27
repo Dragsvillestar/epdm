@@ -31,7 +31,7 @@ const server = http.createServer(app);
 const io = require("socket.io")(server, {
   path: '/api/socket.io',
   cors: {
-    origin: ["http://localhost:5173", 'https://www.energyprojectsdata.com/', 'https://energyprojectsdata.com'],
+    origin: ["http://localhost:5173", 'https://www.energyprojectsdata.com/', 'https://energyprojectsdata.com',"https://energyprojectsdata.onrender.com"],
     methods: ["GET", "POST"],
     credentials: true
   }
