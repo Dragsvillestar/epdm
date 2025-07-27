@@ -6,7 +6,7 @@ const Logger = require('../models/logger');
 router.get('/', async (req, res) => {
   try {
     if (!req.user) {
-      return res.status(401).json({ error: "Not authorized" });
+      return res.json({ error: "Not authorized" });
     }
 
     const hasActiveSubscription = req.user.subscribed && req.user.subscriptionExpiry && req.user.subscriptionExpiry > Date.now();
@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
       }
       return projectObj;
     });
-    res.status(200).json(formattedProjects);
+    res.status(200).json({subscription: true, projects: formattedProjects});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -133,7 +133,7 @@ router.post('/newsletter', async (req, res) => {
     await project.save();
     await user.save();
 
-    res.status(200).json({ message: "Subscribe status updated" });
+    res.status(200).json({ message: "Subscribe status updated", subscribed: user.subscribedProjects });
 
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -181,6 +181,46 @@ router.post("/view", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+router.get('/recentProjects', async (req, res) => {
+  try {
+    const recentCreated = await Project.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .lean(); // Use lean for better performance
+
+    const recentCreatedIds = recentCreated.map(p => p._id.toString());
+
+    const recentUpdated = await Project.find({
+      _id: { $nin: recentCreatedIds }
+    })
+      .sort({ updatedAt: -1 })
+      .limit(5)
+      .lean();
+
+    const formatProjectDates = (project) => {
+      if (project.createdAt) {
+        project.createdAt = new Date(project.createdAt).toISOString().split('T')[0];
+      }
+      if (project.updatedAt) {
+        project.updatedAt = new Date(project.updatedAt).toISOString().split('T')[0];
+      }
+      return project;
+    };
+
+    const formattedCreated = recentCreated.map(formatProjectDates);
+    const formattedUpdated = recentUpdated.map(formatProjectDates);
+
+    res.status(200).json({
+      recentCreated: formattedCreated,
+      recentUpdated: formattedUpdated
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 
 module.exports = router;

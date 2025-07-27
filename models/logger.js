@@ -6,6 +6,7 @@ const loggerSchema = new mongoose.Schema({
     position: String,
     email: { type: String, required: true },
     phone: String,
+    company: String,
     address: String,
     nature: String,
     emailVerified: { type: Boolean, default: false },

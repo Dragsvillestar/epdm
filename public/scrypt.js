@@ -11,7 +11,7 @@ const deleteProjectDialog = document.getElementById("deleteProjectDialog");
 const deleteWarnng = document.getElementById("deleteWarningdialog");
 const deleteProjectForm = document.getElementById("deleteProjectForm");
 
-  
+
 const projectEntries = [
   "Project ID",
   "Project Name",
@@ -56,61 +56,61 @@ const projectEntries = [
 ];
 
 const openLogin = () => {
-    adminLoginDialog.showModal();
+  adminLoginDialog.showModal();
 };
 
 const closeLogin = () => {
-    adminLoginDialog.close();
-}; 
+  adminLoginDialog.close();
+};
 
 const resetLogin = () => {
   adminForm.reset();
 };
 
 const openProjectReg = () => {
-    projectRegDialog.showModal();
-    adminMainDialog.close();
+  projectRegDialog.showModal();
+  adminMainDialog.close();
 };
 
 const closeProjectReg = () => {
-    projectRegDialog.close();
-    projectRegForm.reset(); 
-    adminMainDialog.showModal();
+  projectRegDialog.close();
+  projectRegForm.reset();
+  adminMainDialog.showModal();
 };
 
-const openAdmin= () => {
-    adminMainDialog.showModal();
+const openAdmin = () => {
+  adminMainDialog.showModal();
 };
 
 const closeAdmin = () => {
-    adminMainDialog.close();
+  adminMainDialog.close();
 };
 
 const openAdminReg = () => {
-    adminSignUpDialog.showModal();
+  adminSignUpDialog.showModal();
 };
 
 const closeAdminReg = () => {
-    adminSignUpDialog.close();
+  adminSignUpDialog.close();
 };
 
 const openFind = () => {
-    closeAdmin();
-    projectFindDialog.showModal();
+  closeAdmin();
+  projectFindDialog.showModal();
 };
 
-const closeFind = () =>{
-    projectFindDialog.close();
-    openAdmin();
+const closeFind = () => {
+  projectFindDialog.close();
+  openAdmin();
 };
 
 const openUpdate = () => {
-    projectUpdateDialog.showModal();
+  projectUpdateDialog.showModal();
 };
 
 const closeUpdate = () => {
-    projectUpdateDialog.close();
-    projectFindDialog.showModal();
+  projectUpdateDialog.close();
+  projectFindDialog.showModal();
 };
 
 const openDeleteProject = () => {
@@ -119,107 +119,108 @@ const openDeleteProject = () => {
 }
 
 const closeDeleteProject = () => {
-    deleteProjectDialog.close();
-    adminMainDialog.showModal();
+  deleteProjectDialog.close();
+  adminMainDialog.showModal();
 };
 
-document.getElementById("adminRegLink").addEventListener("click", function(event) {
-    event.preventDefault();
-    adminReg();
+document.getElementById("adminRegLink").addEventListener("click", function (event) {
+  event.preventDefault();
+  adminReg();
 });
 
-const adminReg = () => {  
-    closeLogin(); 
-    adminForm.reset();
-    openAdminReg();       
+const adminReg = () => {
+  closeLogin();
+  adminForm.reset();
+  openAdminReg();
 }
 const cancelReg = () => {
-    document.getElementById("adminRegistrationForm").reset();
-    closeAdminReg() ;
-    openLogin();
+  document.getElementById("adminRegistrationForm").reset();
+  closeAdminReg();
+  openLogin();
 }
 
 adminForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-    console.log("Form submitted!");
+  e.preventDefault();
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+  console.log("Form submitted!");
 
-    fetch("/admin/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ username, password })
-    })
+  fetch("/admin/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ username, password })
+  })
     .then(response => response.json())
     .then(data => {
-        if (data.error) {
-            console.log(data.error);
-            document.getElementById("message").textContent = data.error;
-            setTimeout(()=>  {
-              document.getElementById("message").textContent = ""},2000)
-        } else if (data.success) {
-          console.log(data.success);            
-          document.getElementById("message").textContent = data.success; 
-          setTimeout(() => {
-              document.getElementById("message").textContent = "";
-              adminForm.reset();
-              closeLogin();
-              openAdmin();            
-          }, 1000);
+      if (data.error) {
+        console.log(data.error);
+        document.getElementById("message").textContent = data.error;
+        setTimeout(() => {
+          document.getElementById("message").textContent = ""
+        }, 2000)
+      } else if (data.success) {
+        console.log(data.success);
+        document.getElementById("message").textContent = data.success;
+        setTimeout(() => {
+          document.getElementById("message").textContent = "";
+          adminForm.reset();
+          closeLogin();
+          openAdmin();
+        }, 1000);
       }  //
     })
     .catch(error => console.error("Error:", error));
 });
 
 
-const adminLoggedOut= () => {
-    closeAdmin();
-    openLogin();
+const adminLoggedOut = () => {
+  closeAdmin();
+  openLogin();
 }
 
 window.onload = () => {
-    openLogin();
+  openLogin();
 };
 
 document.getElementById("adminRegistrationForm").addEventListener("submit", (e) => {
   e.preventDefault();
   const newAdminUsername = document.getElementById("newAdminUsername").value;
-  const newAdminPassword = document.getElementById("newAdminPassword").value;    
-  const newAdminEmail = document.getElementById("newAdminEmail").value;    
-  const currentAdminUsername = document.getElementById("currentAdminUsername").value;    
+  const newAdminPassword = document.getElementById("newAdminPassword").value;
+  const newAdminEmail = document.getElementById("newAdminEmail").value;
+  const currentAdminUsername = document.getElementById("currentAdminUsername").value;
   const currentAdminPassword = document.getElementById("currentAdminPassword").value;
 
   fetch("/admin/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ newAdminUsername, newAdminPassword, newAdminEmail, currentAdminUsername, currentAdminPassword})
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ newAdminUsername, newAdminPassword, newAdminEmail, currentAdminUsername, currentAdminPassword })
   })
-  .then(response => response.json())
-  .then(data => {
+    .then(response => response.json())
+    .then(data => {
       if (data.error) {
-          console.log(data.error);
-          document.getElementById("regmessage").textContent = data.error;
+        console.log(data.error);
+        document.getElementById("regmessage").textContent = data.error;
       } else {
-          console.log(data.message);
-          document.getElementById("regmessage").textContent = data.message;
-          document.getElementById("adminRegistrationForm").reset();
+        console.log(data.message);
+        document.getElementById("regmessage").textContent = data.message;
+        document.getElementById("adminRegistrationForm").reset();
       }
-  })
-  .catch(error => console.error("Error:", error));
+    })
+    .catch(error => console.error("Error:", error));
 });
 
-document.getElementById("add-milestone-btn").addEventListener("click", function() {
-    const container = document.getElementById("milestones-container");
-    const newMilestone = document.createElement("div");
-    newMilestone.classList.add("milestone-pair", "mb-3");
-    newMilestone.innerHTML = `
+document.getElementById("add-milestone-btn").addEventListener("click", function () {
+  const container = document.getElementById("milestones-container");
+  const newMilestone = document.createElement("div");
+  newMilestone.classList.add("milestone-pair", "mb-3");
+  newMilestone.innerHTML = `
       <input type="text" class="form-control milestone" name="milestones" placeholder="Enter Major Milestone">
       <input type="date" class="form-control milestone-date" name="milestoneDates" style="max-width: 150px;">
     `;
-    container.appendChild(newMilestone);
-  });
+  container.appendChild(newMilestone);
+});
 
 projectRegForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -235,7 +236,7 @@ projectRegForm.addEventListener("submit", async (e) => {
     });
 
     const result = await response.json();
-    
+
     if (result.error) {
       console.log("Project not submitted", result.error);
       projectSaveStatus.textContent = result.error;
@@ -246,9 +247,9 @@ projectRegForm.addEventListener("submit", async (e) => {
         projectSaveStatus.textContent = "";
         projectRegForm.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 3000);
-      
+
     };
-    
+
   } catch (error) {
     console.error("Error submitting project:", error);
   }
@@ -256,7 +257,7 @@ projectRegForm.addEventListener("submit", async (e) => {
 
 
 const projectCall = (data) => {
-    return `
+  return `
     <li class="mb-2">
       <label for="projectId" class="form-label">Project ID</label>
       <span class="profileSpan" id="projectIdDisplay">${data.project.projectId || ''}</span>
@@ -472,12 +473,12 @@ const projectCall = (data) => {
       <span class="profileSpan" id="projectProcurementManagerEmailMainContractorDisplay">${data.project.projectProcurementManagerEmailMainContractor || ''}</span>
       <button type="button" class="edit-btn" data-field="projectProcurementManagerEmailMainContractor">Edit</button>
     </li>
-`;  
+`;
 }
 
 const projectUpdateCancel = () => {
-    resetentries = projectCall(previousData);
-    projectUpdateDialog.innerHTML =  `
+  resetentries = projectCall(previousData);
+  projectUpdateDialog.innerHTML = `
     <div id="projectProfileDiv">
         <ul>${resetentries}</ul>
         <p id="projectUpdateInfo" class="text-center fw-bold"></p>
@@ -595,11 +596,11 @@ document.getElementById("findProjectForm").addEventListener("submit", function (
 
 deleteProjectForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  
+
   // Get the project ID value from the input element
   const projectIdInput = document.getElementById("deleteProjectId");
   const projectId = projectIdInput.value;
-  
+
   // Make the fetch call with correct syntax
   fetch("/new-project/delete", {
     method: "POST",
@@ -611,7 +612,7 @@ deleteProjectForm.addEventListener("submit", (e) => {
       if (data.success) {
         document.getElementById("projectDeleteMsg").textContent = data.message;
         deleteProjectForm.reset();
-        setTimeout(() => {document.getElementById("projectDeleteMsg").textContent = ""},3000);
+        setTimeout(() => { document.getElementById("projectDeleteMsg").textContent = "" }, 3000);
       } else if (data.error) {
         document.getElementById("projectDeleteMsg").textContent = data.error;
       }
@@ -619,17 +620,16 @@ deleteProjectForm.addEventListener("submit", (e) => {
     .catch(error => console.error("Error:", error));
 });
 
-
-document.getElementById("eyeIcon").addEventListener("click", function() {
+document.getElementById("eyeIcon").addEventListener("click", function () {
   const isPasswordVisible = document.getElementById("password").type === "text";
   document.getElementById("password").type = isPasswordVisible ? "password" : "text";
 
-  document.getElementById("eyeIcon").innerHTML = isPasswordVisible ? "show" : "hide"; 
+  document.getElementById("eyeIcon").innerHTML = isPasswordVisible ? "show" : "hide";
 });
 
-document.getElementById("eyeIconReg").addEventListener("click", function() {
+document.getElementById("eyeIconReg").addEventListener("click", function () {
   const isPasswordVisible = document.getElementById("newAdminPassword").type === "text";
   document.getElementById("newAdminPassword").type = isPasswordVisible ? "password" : "text";
 
-  document.getElementById("eyeIconReg").innerHTML = isPasswordVisible ? "show" : "hide"; 
+  document.getElementById("eyeIconReg").innerHTML = isPasswordVisible ? "show" : "hide";
 });

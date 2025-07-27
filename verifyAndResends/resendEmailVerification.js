@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
       const now = await Logger.aggregate([{ $project: { currentTime: "$$NOW" } }]);  
       const currentTime =  now[0]?.currentTime || new Date();
       const lastRequestTime = user.lastVerificationRequest || new Date(0); 
-      const cooldown = 30 * 1000;
+      const cooldown = 60 * 1000;
   
       console.log(`Now: ${currentTime}, Last Request: ${lastRequestTime}`);
       

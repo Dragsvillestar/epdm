@@ -17,6 +17,7 @@ const regDialog = document.getElementById("regDialog");
 const otpDialog = document.getElementById("otpDialog");
 const contactUsDialog = document.getElementById("contactUsDialog");
 
+
 const openDialog = () => {
     dialog.showModal();
 }
@@ -38,8 +39,8 @@ loginForm.addEventListener('submit', (e) => {
   e.preventDefault();
   loginButton.textContent = "Logining in..."
   
-  const username = document.getElementById('username').value.toLowerCase();
-  const password = document.getElementById('password').value;
+  const username = document.getElementById('username').value.trim().toLowerCase();
+  const password = document.getElementById('password').value.trim();
 
   const data = new URLSearchParams();
   data.append('username', username);
@@ -122,8 +123,8 @@ const signUp = () => {
         e.preventDefault();
         submitButton.textContent = "Signing up..."
 
-        const username = document.getElementById('signUpUsername').value.toLowerCase();
-        const password = document.getElementById('signUpPassword').value;
+        const username = document.getElementById('signUpUsername').value.trim().toLowerCase();
+        const password = document.getElementById('signUpPassword').value.trim();        
         const position = document.getElementById('signUpPosition').value;
         const email = document.getElementById('signUpEmail').value;
         const phone = document.getElementById('signUpPhone').value;
@@ -334,62 +335,63 @@ const signUp = () => {
           }
         }
       });
-    
-    const passwordInput = document.getElementById("signUpPassword");
-    const eyeIcon = document.getElementById("signUpShow");
+  
+};
+  
 
-    eyeIcon.addEventListener("click", function() {
-      const isPasswordVisible = passwordInput.type === "text";
-      passwordInput.type = isPasswordVisible ? "password" : "text";
+function showSignUpPassword() {
+  const eyeIcon = document.getElementById("signUpShow");
+  const passwordInput = document.getElementById("signUpPassword");
+  const isPasswordVisible = passwordInput.type === "text";
+  passwordInput.type = isPasswordVisible ? "password" : "text";
 
-      eyeIcon.innerHTML = isPasswordVisible ? "show" : "hide";
-    });
+  eyeIcon.innerHTML = isPasswordVisible ? "show" : "hide";
+};
 
-  };
 
-  const originalContent = `
-      <div class="projectUl">                           
-        <ul style="list-style-position: inside;">
-          <h5 class="fw-bold mb-3" id="project-head">OIL AND GAS PROJECTS</h5>
-          <li class="fw-bold m-3 sideBarli">NLNG Train 7 Project</li>
-          <li class="fw-bold m-3 sideBarli">AKK Gas Pipeline Project</li>
-          <li class="fw-bold m-3 sideBarli">Shell Southern Swamp AGS 3B Project</li>
-          <li class="fw-bold m-3 sideBarli">Preowei Deepwater Dev. Project</li>
-        </ul>
+const originalContent = `
+    <div class="projectUl">
+      <ul style="list-style-position: inside;">
+        <h5 class="fw-bold mb-3" id="project-head">OIL AND GAS PROJECTS</h5>
+        <li class="fw-bold m-3 sideBarli">NLNG Train 7 Project</li>
+        <li class="fw-bold m-3 sideBarli">AKK Gas Pipeline Project</li>
+        <li class="fw-bold m-3 sideBarli">Shell Southern Swamp AGS 3B Project</li>
+        <li class="fw-bold m-3 sideBarli">Preowei Deepwater Dev. Project</li>
+      </ul>
+    </div>
+
+    <div class="row mb-2 moreDiv">
+      <div class="col-4"></div>
+      <div class="col-4"></div>
+      <div class="col-4">
+        <p class="text-end fw-bold more d-flex">more <i class="bi bi-chevron-double-right"></i></p>
       </div>
-    
-      <div class="row mb-2 moreDiv">
-        <div class="col-4"></div>
-        <div class="col-4"></div>
-        <div class="col-4">
-          <p class="text-end fw-bold more d-flex">more <i class="bi bi-chevron-double-right"></i></p>
-        </div>
-      </div>
-      
-      <section id="toolsSection" class="py-2">
-        <div class="container">
-          <div class="row align-items-center">
-            <div class="col-lg-8">
-              <h2 class="display-5 text-light fw-bold mb-2">TOOLS FOR SUCCESS</h2>
-              <p class="lead text-light">
-                EPDM tracks thousands of energy projects and provides real-time, accurate, and reliable resources for companies seeking new business opportunities and up-to-date industry insights. EPDM delivers the latest information on planned, ongoing, and future energy projects to empower your success.
-              </p>
-            </div>
+    </div>
+
+    <section id="toolsSection" class="py-1">
+      <div class="container" style="width: fit-content;">
+        <div class="row align-items-center">
+          <div class="col-lg-8">
+            <h2 class="display-5 fw-bold text-light mb-1" style="font-size: 35px !important;">TOOLS FOR SUCCESS</h2>
+            <h3 class="fw-bold px-2" style="border-radius: 10px; width: fit-content;color:rgb(23, 61, 97); font-size: 30px">A Real-Time Digital Platform</h3>
+            <p class="text-light" style="font-size: 16px !important;">
+              EPDM tracks thousands of energy projects and provides real-time, accurate, and reliable resources for companies seeking new business opportunities, analytics and up-to-date industry insights. EPDM delivers the latest information on planned, ongoing, and future energy projects to empower your success.
+            </p>
           </div>
         </div>
-      </section>
-      
-      <div class="input-group input-group-sm mt-2 mb-1 d-flex justify-content-end">
-        <span class="input-group-text" id="searchSpan">Search</span>
-        <input type="text" class="form-control" id="searchInput">
       </div>
+    </section>
 
-      <div class="input-group input-group-sm mt-2 mb-1 d-flex justify-content-end">
-        <button class="btn" style="background-color: #44537c; color: white;">Request a Demo</button>
-      </div>
+    <div class="input-group input-group-sm mt-1 mb-1 d-flex justify-content-end">
+      <span class="input-group-text" id="searchSpan" style="background-color: #778ca9; border: #778ca9;">Search</span>
+      <input type="text" class="form-control" id="searchInput">
+    </div>
 
-    </div>  
-      `;
+    <div class="input-group input-group-sm mt-1 mb-1 d-flex justify-content-end">
+      <button class="btn" style="background-color: #778ca9; color: white;">Request a Demo <span style="display: block;">info@energyprojectsdata.com</span></button>
+    </div>
+
+    `;
 
 const aboutUs = () => {
     projectDiv.innerHTML = `<!-- Element where the document will be displayed -->
@@ -458,6 +460,8 @@ const services = () => {
                 <li style="font-size: inherit;">Online Energy Projects Data Marketing</li>
                 <li style="font-size: inherit;">Energy Consultancy Services</li>
                 <li style="font-size: inherit;">Project Management Consulting</li>
+                <li style="font-size: inherit;">Analytics</li>
+                <li style="font-size: inherit;">Industry Insights</li>
             </ul>
           </div>
         </div>
@@ -467,6 +471,42 @@ const services = () => {
     document.getElementById('closeServices').addEventListener('click', () => {
         projectDiv.innerHTML = originalContent;
     });
+};
+
+const projectInterview = () => {
+  projectDiv.innerHTML = `
+  <div class="container mt-0">
+    <div class="document-display" style = "min-width: 50%;">
+      <button id="closeProjectInterview" class="close-btn">
+        <i class="bi bi-chevron-double-left"></i> Back
+      </button>
+      <div class="card" style = "margin: 5px auto">
+        <div class="card-header">
+          <h5>Services</h5>
+        </div>
+        <div class="card-body">
+          <h6>
+          At the end of any major energy  project, EPDM interviews the Project Manager and  uploads the interview on its website for industry use.
+          </h6>
+          <h6>
+          The project interview covers the following area:
+          </h6>
+          <ul class="text-dark" style="font-size: 15px;">
+              <li style="font-size: inherit;">Project overview/goals.</li>
+              <li style="font-size: inherit;">Project execution strategy.</li>
+              <li style="font-size: inherit;">Challenges/risk/mitigation/solution</li>
+              <li style="font-size: inherit;">Local content achievements on the project/%LC.</li>
+              <li style="font-size: inherit;">Lessons learned on the project.</li>
+              <li style="font-size: inherit;">Community content and relations strategy/lessons learned.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  document.getElementById('closeProjectInterview').addEventListener('click', () => {
+      projectDiv.innerHTML = originalContent;
+  });
 };
 
 const contactUs = () => {

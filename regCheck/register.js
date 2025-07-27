@@ -6,7 +6,9 @@ const crypto = require("crypto");
 const { sendVerificationEmail, transporter } = require('../controllers/emailverification');
 
 router.post('/', async (req, res, next) => {
-    const { username, password, position, email, phone, address, nature } = req.body;
+  const { username, password, position, email, phone, company, address, nature } = req.body;
+  console.log("company:",company)
+  
     try {
       const existingUser = await Logger.findOne({ username });
       if (existingUser) {
@@ -33,6 +35,7 @@ router.post('/', async (req, res, next) => {
         position,
         email,
         phone,
+        company,
         address,
         nature,
         emailVerified: false,
@@ -47,11 +50,11 @@ router.post('/', async (req, res, next) => {
   
       sendVerificationEmail(email, verificationToken);
   
-      return res.redirect('/?verified=false');
+      return res.status(200).json({ success: true, redirectUrl: '/' });
   
     } catch (err) {
       console.error(err);
-      res.status(500).send('Error registering user');
+      res.status(500).json({ success: false, error: 'Error registering user' });
     }
   });
 

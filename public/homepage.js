@@ -5,35 +5,35 @@ const projectsMenu = document.getElementById("projectsmenu");
 const subscribe = document.getElementById("subscribeButton");
 
 logOutButton.addEventListener("click", () => {
-    fetch("/logout", { method: "GET" })
+  fetch("/logout", { method: "GET" })
     .then(response => {
-        if (response.ok) {
-            if (response.redirected) {
-                window.location.href = response.url; 
-            }
-        } else {
-            console.error("Logout failed", response.status);
+      if (response.ok) {
+        if (response.redirected) {
+          window.location.href = response.url;
         }
+      } else {
+        console.error("Logout failed", response.status);
+      }
     })
     .catch(error => {
-        console.error("Error during logout:", error);
+      console.error("Error during logout:", error);
     });
 });
 
 document.getElementById("offLogOut").addEventListener("click", () => {
   fetch("/logout", { method: "GET" })
-  .then(response => {
+    .then(response => {
       if (response.ok) {
-          if (response.redirected) {
-              window.location.href = response.url; 
-          }
+        if (response.redirected) {
+          window.location.href = response.url;
+        }
       } else {
-          console.error("Logout failed", response.status);
+        console.error("Logout failed", response.status);
       }
-  })
-  .catch(error => {
+    })
+    .catch(error => {
       console.error("Error during logout:", error);
-  });
+    });
 });
 
 function attachEventListeners() {
@@ -65,19 +65,19 @@ function attachEventListeners() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updateData)
     })
-    .then(response => response.json())
-    .then(result => {
-      if (result.success) {
-        console.log("Profile updated successfully:", updateData);
-        document.getElementById("profileUpdateInfo").textContent = "Profile updated successfully";
-        previousData = { ...previousData, ...updateData };
-        updateData = {};
-      } else {
-        console.error("Error updating profile:", result.message);
-        document.getElementById("profileUpdateInfo").textContent = "Error updating profile: " + result.message;
-      }
-    })
-    .catch(err => console.error(err));
+      .then(response => response.json())
+      .then(result => {
+        if (result.success) {
+          console.log("Profile updated successfully:", updateData);
+          document.getElementById("profileUpdateInfo").textContent = "Profile updated successfully";
+          previousData = { ...previousData, ...updateData };
+          updateData = {};
+        } else {
+          console.error("Error updating profile:", result.message);
+          document.getElementById("profileUpdateInfo").textContent = "Error updating profile: " + result.message;
+        }
+      })
+      .catch(err => console.error(err));
   });
 
   document.getElementById("cancelChanges").addEventListener("click", () => {
@@ -132,7 +132,7 @@ function loadProfile() {
     .then(response => response.json())
     .then(data => {
       previousData = { ...data };
-      updateData = {}; 
+      updateData = {};
       contentDiv.innerHTML = profileChange(data);
 
       document.querySelectorAll('.edit-btn').forEach(button => {
@@ -147,7 +147,7 @@ function loadProfile() {
           } else {
             const newValue = document.getElementById(field + 'Input').value;
             if (newValue !== previousData[field]) {
-              updateData[field] = newValue;  
+              updateData[field] = newValue;
             } else {
               delete updateData[field];
             }
@@ -219,7 +219,7 @@ const fieldMappings = {
   projectFinance: "Project Finance",
   subContractors: "Subcontractors",
   section: "Section",
-  
+
   // Client-side project manager details
   projectManagerNameClient: "Project Manager Name (Client)",
   projectManagerTelephoneClient: "Project Manager Telephone (Client)",
@@ -282,7 +282,7 @@ function fetchFavs() {
 function loadFaves() {
   // Select all favorite checkboxes by name attribute.
   const favCheckboxes = document.querySelectorAll("input[name='favourite']");
-  
+
   favCheckboxes.forEach(checkbox => {
     // Assuming checkbox id is of the form "favourite-<projectId>"
     const projectId = checkbox.id.split("favourite-")[1];
@@ -300,7 +300,7 @@ function loadFaves() {
 function filterFavoritesOnly() {
   // Select all accordion items within the projects accordion.
   const accordionItems = document.querySelectorAll("#projectsAccordion .accordion-item");
-  
+
   accordionItems.forEach(item => {
     // Find the favorite checkbox within the current accordion item.
     const favCheckbox = item.querySelector("input[name='favourite']");
@@ -350,7 +350,7 @@ function filterSubscribedOnly() {
   accordionItems.forEach(item => {
     // Find the newsletter checkbox within the current accordion item.
     const newsCheckbox = item.querySelector("input[name='newsletter']");
-    
+
     // If the newsletter checkbox exists and is checked, show the item.
     // Otherwise, hide it.
     if (newsCheckbox && newsCheckbox.checked) {
@@ -369,7 +369,7 @@ document.querySelectorAll(".newsletterBtn").forEach(button => {
   button.addEventListener("click", filterSubscribedOnly);
 });
 
-document.getElementById("offNewsletterBtn").addEventListener("click",filterSubscribedOnly);
+document.getElementById("offNewsletterBtn").addEventListener("click", filterSubscribedOnly);
 
 projectsMenu.addEventListener("click", (event) => {
   loadProjects(event);
@@ -408,7 +408,7 @@ function loadProjects(event) {
     { id: "downstream", label: "Downstream", checked: false },
     { id: "service-companies", label: "Service Companies", checked: false },
     { id: "oem-manufacturers", label: "OEM/Manufacturers", checked: false }
-];
+  ];
 
   filters.forEach(filter => {
     const checkbox = document.createElement("input");
@@ -421,6 +421,7 @@ function loadProjects(event) {
     label.htmlFor = filter.id;
     label.textContent = filter.label;
     label.style.marginRight = "15px";
+    label.className = "filterchecks"
 
     filterDiv.appendChild(checkbox);
     filterDiv.appendChild(label);
@@ -484,29 +485,29 @@ function loadProjects(event) {
       accordionDiv.classList.add("accordion");
 
       function updateProjectList() {
-    const allChecked = document.getElementById("all").checked;
-    const upstreamChecked = document.getElementById("upstream").checked;
-    const midstreamChecked = document.getElementById("midstream").checked;
-    const downstreamChecked = document.getElementById("downstream").checked;
-    const serviceCompaniesChecked = document.getElementById("service-companies").checked;
-    const oemManufacturersChecked = document.getElementById("oem-manufacturers").checked;
+        const allChecked = document.getElementById("all").checked;
+        const upstreamChecked = document.getElementById("upstream").checked;
+        const midstreamChecked = document.getElementById("midstream").checked;
+        const downstreamChecked = document.getElementById("downstream").checked;
+        const serviceCompaniesChecked = document.getElementById("service-companies").checked;
+        const oemManufacturersChecked = document.getElementById("oem-manufacturers").checked;
 
-    let displayedProjects = filteredData.filter(project => {
-        if (allChecked) return true;
-        if (upstreamChecked && project.section === "Upstream") return true;
-        if (midstreamChecked && project.section === "Midstream") return true;
-        if (downstreamChecked && project.section === "Downstream") return true;
-        if (serviceCompaniesChecked && project.section === "Service Companies") return true;
-        if (oemManufacturersChecked && project.section === "OEM/Manufacturers") return true;
-        return false;
-    });
+        let displayedProjects = filteredData.filter(project => {
+          if (allChecked) return true;
+          if (upstreamChecked && project.section === "Upstream") return true;
+          if (midstreamChecked && project.section === "Midstream") return true;
+          if (downstreamChecked && project.section === "Downstream") return true;
+          if (serviceCompaniesChecked && project.section === "Service Companies") return true;
+          if (oemManufacturersChecked && project.section === "OEM/Manufacturers") return true;
+          return false;
+        });
 
         accordionDiv.innerHTML = "";
 
         displayedProjects.forEach((project, index) => {
           const accordionItem = document.createElement("div");
           accordionItem.classList.add("accordion-item");
-          
+
           const headerId = "heading" + index;
           const collapseId = "collapse" + index;
           const accordionHeader = document.createElement("h2");
@@ -514,7 +515,7 @@ function loadProjects(event) {
           accordionHeader.id = headerId;
 
           const accordionButton = document.createElement("button");
-          accordionButton.classList.add("accordion-button", "collapsed");          
+          accordionButton.classList.add("accordion-button", "collapsed");
           accordionButton.setAttribute("data-project-id", project.projectId || "unknown");
           accordionButton.type = "button";
           accordionButton.setAttribute("data-bs-toggle", "collapse");
@@ -524,7 +525,7 @@ function loadProjects(event) {
           accordionButton.innerHTML = `<strong>${project.projectName || project.projectId}</strong>`;
           accordionHeader.appendChild(accordionButton);
           accordionItem.appendChild(accordionHeader);
-          
+
           const collapseDiv = document.createElement("div");
           collapseDiv.id = collapseId;
           collapseDiv.classList.add("accordion-collapse", "collapse");
@@ -538,18 +539,18 @@ function loadProjects(event) {
           ul.classList.add("list-group", "mb-3");
 
           Object.entries(project).forEach(([key, value]) => {
-            if (key !== 'viewCount'){
+            if (key !== 'viewCount') {
               let displayName = fieldMappings[key] || key;
               const li = document.createElement("li");
-              li.classList.add("list-group-item");  
+              li.classList.add("list-group-item");
 
               const valueStr = (value || "").toString().toLowerCase();
-          
+
               li.setAttribute("data-field", displayName.toLowerCase());
               li.setAttribute("data-value", valueStr);
               li.innerHTML = `<strong>${displayName}:</strong> ${value}`;
               ul.appendChild(li);
-            };            
+            };
           });
 
           const viewCountP = document.createElement("p");
@@ -558,7 +559,7 @@ function loadProjects(event) {
           viewCountP.style.color = "black";
           viewCountP.style.fontSize = "14px";
           viewCountP.textContent = `Views: ${project.viewCount || 0}`;
-          
+
           accordionBody.appendChild(viewCountP);
           accordionBody.appendChild(ul);
 
@@ -584,19 +585,19 @@ function loadProjects(event) {
 
           const newsGroup = document.createElement("div");
           newsGroup.classList.add("d-flex", "align-items-center", "gap-2");
-          
+
           const newsCheckbox = document.createElement("input");
           newsCheckbox.type = "checkbox";
           newsCheckbox.classList.add("form-check-input");
           newsCheckbox.id = "newsletter-" + project.projectId;
           newsCheckbox.name = "newsletter";
-          newsCheckbox.style.display ="none";
-          
+          // newsCheckbox.style.display = "none";
+
           const newsLabel = document.createElement("label");
           newsLabel.htmlFor = newsCheckbox.id;
           newsLabel.textContent = "Subscribe to newsletter";
-          newsLabel.style.display = "none";
-          
+          // newsLabel.style.display = "none";
+
           // Append elements
           newsGroup.appendChild(newsCheckbox);
           newsGroup.appendChild(newsLabel);
@@ -654,7 +655,7 @@ function loadProjects(event) {
         contentDiv.appendChild(accordionDiv);
         fetchFavs();
         loadFaves();
-        fetchSubscriptions() 
+        fetchSubscriptions()
         loadSubscriptions()
       }
 
@@ -662,85 +663,85 @@ function loadProjects(event) {
       // Attach event listeners to checkboxes
       filters.forEach(filter => {
         document.getElementById(filter.id).addEventListener("change", () => {
-            if (filter.id === "all") {
-                // If "All" is checked, uncheck all other filters
-                if (document.getElementById("all").checked) {
-                    document.getElementById("upstream").checked = false;
-                    document.getElementById("midstream").checked = false;
-                    document.getElementById("downstream").checked = false;
-                    document.getElementById("service-companies").checked = false;
-                    document.getElementById("oem-manufacturers").checked = false;
-                }
-            } else {
-                // If any other checkbox is checked, uncheck "All"
-                if (
-                    document.getElementById("upstream").checked ||
-                    document.getElementById("midstream").checked ||
-                    document.getElementById("downstream").checked ||
-                    document.getElementById("service-companies").checked ||
-                    document.getElementById("oem-manufacturers").checked
-                ) {
-                    document.getElementById("all").checked = false;
-                }
-    
-                // If none of the specific categories are checked, recheck "All"
-                if (
-                    !document.getElementById("upstream").checked &&
-                    !document.getElementById("midstream").checked &&
-                    !document.getElementById("downstream").checked &&
-                    !document.getElementById("service-companies").checked &&
-                    !document.getElementById("oem-manufacturers").checked
-                ) {
-                    document.getElementById("all").checked = true;
-                }
+          if (filter.id === "all") {
+            // If "All" is checked, uncheck all other filters
+            if (document.getElementById("all").checked) {
+              document.getElementById("upstream").checked = false;
+              document.getElementById("midstream").checked = false;
+              document.getElementById("downstream").checked = false;
+              document.getElementById("service-companies").checked = false;
+              document.getElementById("oem-manufacturers").checked = false;
             }
-      
+          } else {
+            // If any other checkbox is checked, uncheck "All"
+            if (
+              document.getElementById("upstream").checked ||
+              document.getElementById("midstream").checked ||
+              document.getElementById("downstream").checked ||
+              document.getElementById("service-companies").checked ||
+              document.getElementById("oem-manufacturers").checked
+            ) {
+              document.getElementById("all").checked = false;
+            }
+
+            // If none of the specific categories are checked, recheck "All"
+            if (
+              !document.getElementById("upstream").checked &&
+              !document.getElementById("midstream").checked &&
+              !document.getElementById("downstream").checked &&
+              !document.getElementById("service-companies").checked &&
+              !document.getElementById("oem-manufacturers").checked
+            ) {
+              document.getElementById("all").checked = true;
+            }
+          }
+
           updateProjectList();
         });
       })
-    .catch(err => console.error(err));
-});
+        .catch(err => console.error(err));
+    });
 };
 
 async function makePayment() {
   const response = await fetch('/api/initiate-payment', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: 5000, email: "user@example.com", name: "John Doe" })
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ amount: 5000, email: "user@example.com", name: "John Doe" })
   });
 
   const result = await response.json();
   if (result.paymentLink) {
     window.location.href = result.paymentLink;
   } else {
-      alert('Payment failed.');
+    alert('Payment failed.');
   }
 }
 
-async function requestInvoice() {
-  try {
-      const response = await fetch("/api/zoho/invoice", {
-          method: "GET",
-          credentials: "include", // Sends cookies for authentication if needed
-          headers: { "Content-Type": "application/json" },
-      });
+// async function requestInvoice() {
+//   try {
+//     const response = await fetch("/api/zoho/invoice", {
+//       method: "GET",
+//       credentials: "include", // Sends cookies for authentication if needed
+//       headers: { "Content-Type": "application/json" },
+//     });
 
-      if (!response.ok) {
-          throw new Error("Failed to fetch invoice");
-      }
+//     if (!response.ok) {
+//       throw new Error("Failed to fetch invoice");
+//     }
 
-      const data = await response.json();
+//     const data = await response.json();
 
-      // Assuming you have an invoiceContainer div to display the invoice details
-      const invoiceContainer = document.getElementById("invoiceContainer");
-      if (invoiceContainer) {
-          invoiceContainer.innerHTML = `<p>Invoice: ${JSON.stringify(data)}</p>`;
-      }
+//     // Assuming you have an invoiceContainer div to display the invoice details
+//     const invoiceContainer = document.getElementById("invoiceContainer");
+//     if (invoiceContainer) {
+//       invoiceContainer.innerHTML = `<p>Invoice: ${JSON.stringify(data)}</p>`;
+//     }
 
-  } catch (error) {
-      console.error("Error fetching invoice:", error.message);
-  }
-}
+//   } catch (error) {
+//     console.error("Error fetching invoice:", error.message);
+//   }
+// }
 
 
 subscribe.addEventListener("click", () => {
@@ -751,32 +752,32 @@ document.getElementById("offSubscribeButton").addEventListener("click", () => {
   subscribePay();
 });
 
-function subscribePay () {
-    contentDiv.innerHTML = "";
+function subscribePay() {
+  contentDiv.innerHTML = "";
 
-    const infoDiv = document.createElement("div");
-    infoDiv.classList.add("infoDiv"); 
-    infoDiv.innerHTML = `
+  const infoDiv = document.createElement("div");
+  infoDiv.classList.add("infoDiv");
+  infoDiv.innerHTML = `
         <p>You will be charged <strong>NGN 100</strong> for a <strong>30-day subscription</strong> to <strong>epmdprojects</strong>.</p>
         <p>You will receive a notification when your subscription is about to expire.</p>
     `;
 
-    const messageParagraph = document.createElement("p");
-    messageParagraph.id = "messageParagraph"; 
-    messageParagraph.textContent = ""; // Initially empty
-    
-    const payNowButton = document.createElement("button");
-    payNowButton.textContent = "Pay Now";
-    payNowButton.classList.add("payNowButton"); 
-    payNowButton.addEventListener("click", () => {
-        messageParagraph.textContent = "Redirecting to payment...";
-        makePayment();
-    });
-    
-    // Append elements
-    infoDiv.appendChild(messageParagraph);
-    infoDiv.appendChild(payNowButton);
-    contentDiv.appendChild(infoDiv);
+  const messageParagraph = document.createElement("p");
+  messageParagraph.id = "messageParagraph";
+  messageParagraph.textContent = ""; // Initially empty
+
+  const payNowButton = document.createElement("button");
+  payNowButton.textContent = "Pay Now";
+  payNowButton.classList.add("payNowButton");
+  payNowButton.addEventListener("click", () => {
+    messageParagraph.textContent = "Redirecting to payment...";
+    makePayment();
+  });
+
+  // Append elements
+  infoDiv.appendChild(messageParagraph);
+  infoDiv.appendChild(payNowButton);
+  contentDiv.appendChild(infoDiv);
 };
 
 
@@ -785,7 +786,7 @@ document.getElementById("searchButton").addEventListener("click", function () {
   const selectedField = document.getElementById("searchCategory").value.toLowerCase();
 
   if (!searchQuery) {
-   
+
     return;
   }
 
@@ -797,24 +798,24 @@ document.getElementById("searchButton").addEventListener("click", function () {
     contentDiv.innerHTML = "<p>No projects loaded. Please load projects first.</p>";
     contentDiv.style.fontSize = "20px";
     contentDiv.style.color = "white";
-    return; 
+    return;
   }
 
   let visibleCount = 0;
 
   accordionItems.forEach((accordionItem) => {
-  
+
     let matchFound = false;
-  
+
     accordionItem.querySelectorAll(".list-group-item").forEach((li) => {
       const field = li.getAttribute("data-field").toLowerCase();
       const value = li.getAttribute("data-value");
-  
+
       if (field === selectedField && regex.test(value)) {
         matchFound = true;
       }
     });
-  
+
     if (matchFound) {
       accordionItem.style.display = "block";
       visibleCount++;
@@ -829,38 +830,45 @@ document.getElementById("searchButton").addEventListener("click", function () {
     contentDiv.style.color = "white";
 
   }
+});
+
+const socket = io();
+
+socket.on("viewCountUpdate", (projectViewCount) => {
+  document.getElementById("viewCount").innerText = `Views: ${projectViewCount}`;
+});
+
+socket.on("siteTrafficUpdate", (siteVisitCount) => {
+  document.getElementById("totalVisits").innerText = siteVisitCount;
+});
+
+socket.on("dailyTrafficUpdate", (dailyVisitCount) => {
+  document.getElementById("visitsToday").innerText = dailyVisitCount;
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.body.addEventListener("click", (event) => {
+    if (event.target.classList.contains("accordion-button")) {
+      const projectId = event.target.getAttribute("data-project-id");
+      updateProjectViewCount(projectId, event.target);
+    }
   });
+});
 
-  const socket = io();
-
-  socket.on("viewCountUpdate", (projectViewCount) => {
-    document.getElementById("viewCount").innerText = `Views: ${projectViewCount}`;
-  });
-
-  document.addEventListener("DOMContentLoaded", () => {
-    document.body.addEventListener("click", (event) => {
-      if (event.target.classList.contains("accordion-button")) {
-        const projectId = event.target.getAttribute("data-project-id");
-        updateProjectViewCount(projectId, event.target);
+function updateProjectViewCount(projectId, button) {
+  fetch("/projects/view", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ projectId }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const viewCountElement = document.getElementById(`view-count-${projectId}`);
+      console.log("Server Response:", data);
+      if (viewCountElement) {
+        viewCountElement.textContent = `Views: ${data.viewCount}`;
       }
-    });
-  });
-  
-  function updateProjectViewCount(projectId, button) {
-    fetch("/projects/view", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ projectId }),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        const viewCountElement = document.getElementById(`view-count-${projectId}`);
-        console.log("Server Response:", data); 
-        if (viewCountElement) {
-          viewCountElement.textContent = `Views: ${data.viewCount}`;
-        }
-      })
-      .catch((error) => console.error("Error updating view count:", error));
-  }
-  
-  
+    .catch((error) => console.error("Error updating view count:", error));
+}
+

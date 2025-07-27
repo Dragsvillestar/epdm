@@ -16,10 +16,6 @@ html, body {
 );
 }
 
-.content-div {
-    border-radius: 15px;
-    background-color: rgb(162, 164, 165);
-}
 .top-section{
     height: 30vh;
     display: flex;
@@ -28,13 +24,49 @@ html, body {
     flex-shrink: 0;
 }
 
+.content-div {
+    border-radius: 15px;
+    background-color: rgb(162, 164, 165);
+    overflow-y: auto;
+    flex: 1;
+    padding-bottom: 40px;
+    max-height: 55vh;
+}
+
 .projects{
-    overflow: scroll;
+    overflow: hidden;
     flex: 1;
     height: 100%;
     background-color: rgb(109, 111, 112);
     border-radius: 10px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: relative;
 }
+
+#bottom-spacer {
+    height: 1.75rem;
+    flex-shrink: 0;
+    width: 100%;
+    background-color: rgb(162, 164, 165);
+    position: absolute;
+    bottom: 0;
+    border-radius: 7px;
+    display: flex;
+    justify-content: space-evenly;
+    border-top: 1px solid #ccc;
+    font-size: 1.1rem;
+    align-items: center;
+    color: white;
+}
+
+
+#bottom-spacer p {
+    margin: 0 10px;
+    margin-bottom: 5px;
+}
+
 #bottom-section{
     height: 70vh;
     background-color:  rgb(224, 224, 228);
@@ -356,4 +388,8 @@ label[for="all"], label[for="upstream"], label[for="midstream"] {
 
 .navbar-toggler {
     padding: 0 !important;
+}
+
+.filterchecks {
+    font-size: 24px;
 }

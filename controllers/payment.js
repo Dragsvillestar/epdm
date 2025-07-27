@@ -2,10 +2,13 @@ const express = require('express');
 const axios = require('axios');
 const Logger = require('../models/logger');
 const moment = require("moment-timezone");
+const path = require('path');
+const Flutterwave = require('flutterwave-node-v3');
+const flw = new Flutterwave(process.env.FW_PUBLIC, process.env.FW_SECRET);
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         if (!req.user) {
             return res.status(401).json({ error: 'User not authenticated' });
@@ -15,11 +18,12 @@ router.post('/', async (req, res) => {
         const email = req.user.email;
         const name = req.user.username; // Assuming username is stored in req.user
 
+        console.log("email:", email);
         const paymentData = {
-            tx_ref: "test_" + Date.now(),
+            tx_ref: `${name}_${Date.now()}`, 
             amount,
             currency: "NGN",
-            redirect_url: "https://www.energyprojectsdata.com/api/initiate-payment/payment-success",
+            redirect_url: "http://localhost:3001/api/initiate-payment/callback",
             payment_options: "card, banktransfer", // Payment methods supported
             customer: { email, name }
         };
@@ -37,6 +41,8 @@ router.post('/', async (req, res) => {
 
 router.post('/flutterwave-webhook', async (req, res) => {
     const payload = req.body;
+    const txRef = payload.txRef;
+    const username = txRef.split('_')[0]; 
 
     console.log("Webhook received:", payload);
 
@@ -51,12 +57,12 @@ router.post('/flutterwave-webhook', async (req, res) => {
     // Process Payment Success
     if (payload.status === "successful") {
         const email = payload.customer.email;
-        const name = payload.customer.name || "Unknown User"; 
-        const amount = payload.amount;  
-        const transactionId = payload.transaction_id || payload.tx_ref; 
+        // const name = payload.customer.name || "Unknown User"; 
+        // const amount = payload.amount;  
+        // const transactionId = payload.transaction_id || payload.tx_ref; 
 
         try {
-            const user = await Logger.findOne({ email });
+            const user = await Logger.findOne({ username: username });
 
             if (user) {
                 user.subscribed = true;
@@ -96,7 +102,35 @@ router.post('/flutterwave-webhook', async (req, res) => {
 
 // Payment success route
 router.get("/payment-success", (req, res) => {
-    res.render("paymentSuccess");
+    console.log("✅ Payment success page hit!");
+    res.sendFile(path.join(__dirname, '..', 'views', 'paymentSuccess.html'));
+});
+
+router.get("/payment-failed", (req, res) => {
+    console.log("❌ Payment failed page hit!");
+    res.sendFile(path.join(__dirname, '..', 'views', 'paymentFailed.html'));
+});
+
+router.get('/callback', async (req, res) => {
+    const transactionId = req.query.transaction_id;
+    console.log(transactionId);
+
+    try {
+        const response = await flw.Transaction.verify({ id: transactionId });
+        console.log(response);
+
+        if (
+            response.data.status === "successful" &&
+            response.data.currency === "NGN"
+        ) {
+            res.redirect(`http://localhost:5173/payment_info?success=true`);
+        } else {
+            res.redirect(`http://localhost:5173/payment_info?success=false`);
+        }
+    } catch (err) {
+        console.error(err);
+        res.send("An error occurred during verification.");
+    }
 });
 
 module.exports = router;

@@ -17,6 +17,7 @@ body,html{
 .blur{
     width:100%;
     position: relative;
+    height: fit-content;
     top: 0;
     left: 0;
     z-index: 5;
@@ -59,29 +60,20 @@ body,html{
 li{
     font-size: 13px
 }
-.listHead{
-    font-size: 16px;
-    text-align: left;
-    margin: 0;
-    padding: 0;
-    font-weight: bold; 
-}
 
 .rightcol{
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
     overflow-y: visible;
 }
 
 .hj{
-    overflow:hidden;
     display: flex;
     flex-direction: column;
     flex: 1;
 }
 .sideBarimg{
-    max-height: 200px;
+    max-height: 120px;
     margin: auto
 }
 footer{
@@ -161,7 +153,7 @@ footer{
 
 #searchInput{
     max-width:200px;
-    border: 2px solid #5C7394 !important;
+    border: 2px solid #778ca9 !important;
 }
 .image-area {
     height: 100%
@@ -253,11 +245,7 @@ a {
     }
  }
   
- @media (max-width:768px){
-    .moreDiv{
-        width:100%
-    }
- }
+ 
 #loginDialog, #regDialog, #otpDialog, #contactUsDialog {
     background-color: rgb(23, 61, 97);
 }
@@ -460,7 +448,7 @@ color: #333;
 
 /* Headings */
 .listHead {
-    font-size: 1.3rem;
+    font-size: 0.8rem;
     font-weight: bold;
     text-transform: uppercase;
     color: #fff; /* White for contrast */
@@ -490,3 +478,22 @@ ul {
     1px -1px 0px white;
 }
 
+@media (max-width: 768px) {
+    .moreDiv{
+        width:100%
+    }
+    .hj {
+        min-height: fit-content;
+    }
+
+    .rightcol{
+        height: fit-content;
+    }
+    footer {
+        height: fit-content;
+        padding-bottom: 15px;
+        text-align: center !important;
+    }
+  }
+
+  

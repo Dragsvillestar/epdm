@@ -20,12 +20,12 @@
                     <div class="sideBarImgDiv mx-auto" style="height:50px;">
                         <div class="text-center">
                           <figure class="text-center p-3" id = "imgFigure">
-                            <img  class = "sideBarimg img-fluid rounded" src="https://raw.githubusercontent.com/Dragsvillestar/new-git/refs/heads/master/IMG-20250125-WA0011%20(1).jpg" alt="">
+                            <img  class = "sideBarimg img-fluid rounded m-2" src="https://raw.githubusercontent.com/Dragsvillestar/new-git/refs/heads/master/IMG-20250125-WA0011%20(1).jpg" alt="">
                             <figcaption class="mt-2 text-muted"><strong class = "mb-0" style = "font-size : 20px;font-weight: 900;">ENERGY PROJECTS</strong><span id = "figSpan" style = "display:block;font-weight: 600;">DATA MEDIA LTD.</span></figcaption>
                           </figure>  
                           <h6 class="p-2 fw-bold" id = "oilHead">OIL AND GAS PROJECTS BY SECTOR</h6>
                         </div>
-                        <div class="container-ul mx-auto">
+                        <div class="container-ul mx-auto mt-2">
                           <h6 class="listHead text-center">UPSTREAM</h6>
                           <ul class="mx-3 mt-0 mb-0 text-center">
                             <li class="sideBarli">Addax</li>
@@ -47,16 +47,16 @@
                           <h6 class="listHead text-center">SERVICE COMPANY</h6>
                           <ul class="m-3 mt-0 text-center">
                             <p class="text-center">.......</p>
-                          </ul> 
+                          </ul>
                           <h6 class="listHead text-center">OEM/MANUFACTURERS</h6>
                           <ul class="m-3 mt-0 text-center">
                             <p class="text-center">.......</p>
-                          </ul>                   
+                          </ul>                    
                         </div>
                     </div>                
                 </div>
             </div>
-            <div class="col-lg-9 rightcol" style = "height:100vh;">
+            <div class="col-lg-9 rightcol">
                <div class="hj">
                 <div class="row main-content" style = "height:100%;">
                   <div class="col-12" style = "height:100%;">
@@ -110,7 +110,7 @@
                                           <label for="signUpPassword" class="form-label">Password</label>
                                           <div class="input-group">
                                           <input type="password" class="form-control" id="signUpPassword" name="password" placeholder="Enter your password" minlength="8" required>
-                                          <span id="signUpShow" class="eye-icon px-1" style = "background-color: white; border-radius: 0 5px 5px 0;padding: auto;">show</span>
+                                          <span id="signUpShow" class="eye-icon px-1" style = "background-color: white; border-radius: 0 5px 5px 0;padding: auto;" onclick="showSignUpPassword()">show</span>
                                           </div>
                                           <p id = "passwordError" class = "mb-0"></p>
                                       </div>
@@ -224,7 +224,7 @@
                                   <a class="nav-link text-light" href="#" id = "partners">OUR PARTNERS</a>
                                 </li>
                                 <li class="nav-item">
-                                  <a class="nav-link text-light" href="#">PROJECT INTERVIEW</a>
+                                  <a class="nav-link text-light" href="#" onclick="projectInterview()">PROJECT INTERVIEW</a>
                                 </li>
                                 <li class="nav-item">
                                   <a class="nav-link text-light" href="#">NEWS</a>
@@ -255,27 +255,27 @@
                           </div>
                         </div>
                         
-                        <section id="toolsSection" class="py-2">
-                          <div class="container">
+                        <section id="toolsSection" class="py-1">
+                          <div class="container" style="width: fit-content;">
                             <div class="row align-items-center">
                               <div class="col-lg-8">
-                                <h2 class="display-5 text-light fw-bold mb-2">TOOLS FOR SUCCESS</h2>
-                                <h3 class="fw-bold px-2" style="border-radius: 10px; width: fit-content;color:rgb(23, 61, 97)">A Real-Time Digital Platform</h3>
-                                <p class="lead text-light">
-                                  EPDM tracks thousands of energy projects and provides real-time, accurate, and reliable resources for companies seeking new business opportunities and up-to-date industry insights. EPDM delivers the latest information on planned, ongoing, and future energy projects to empower your success.
+                                <h2 class="display-5 fw-bold text-light mb-1" style="font-size: 35px !important;">TOOLS FOR SUCCESS</h2>                                
+                                <h3 class="fw-bold px-2" style="border-radius: 10px; width: fit-content;color:rgb(23, 61, 97); font-size: 30px">A Real-Time Digital Platform</h3>
+                                <p class="text-light" style="font-size: 16px !important;">
+                                  EPDM tracks thousands of energy projects and provides real-time, accurate, and reliable resources for companies seeking new business opportunities, analytics and up-to-date industry insights. EPDM delivers the latest information on planned, ongoing, and future energy projects to empower your success.
                                 </p>
                               </div>
                             </div>
                           </div>
                         </section>
                         
-                        <div class="input-group input-group-sm mt-2 mb-1 d-flex justify-content-end">
+                        <div class="input-group input-group-sm mt-1 mb-1 d-flex justify-content-end">
                           <span class="input-group-text" id="searchSpan" style="background-color: #778ca9; border: #778ca9;">Search</span>
                           <input type="text" class="form-control" id="searchInput">
                         </div>
 
-                        <div class="input-group input-group-sm mt-2 mb-1 d-flex justify-content-end">
-                          <button class="btn" style="background-color: #44537c; color: white;">Request a Demo<span style="display: block;">info@energyprojectsdata.com</span></button>
+                        <div class="input-group input-group-sm mt-1 mb-1 d-flex justify-content-end">
+                          <button class="btn" style="background-color: #778ca9; color: white;">Request a Demo <span style="display: block;">info@energyprojectsdata.com</span></button>
                         </div>
 
                       </div>                                                                     
@@ -284,7 +284,7 @@
                </div>                
                <footer class="text-light text-center">
                 <div class="d-flex justify-content-center align-items-center flex-column gap-0">
-                    <p class="text-start mb-0">
+                    <p class="mb-0">
                         Copyright &copy; 2025. All rights reserved Energy Projects Data Media Ltd.
                     </p>
                     <div class="social-icons mt-1">
@@ -294,10 +294,10 @@
                         <a href="#" class="text-light mx-4"><i class="bi bi-instagram"></i></a>
                     </div>
                 </div>
-            </footer>             
-            </div>
+            </footer>                  
+              </div>
+             
         </div>
-        <div id="toast" class="toast">/div>
     </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
   </script>
