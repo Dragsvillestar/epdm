@@ -15,7 +15,12 @@ const sessionStore = MongoStore.create({
     saveUninitialized: false, 
     store: sessionStore,
     name: 'express.sid',
-    cookie: { secure: false, httpOnly: true, maxAge: 1800000 },
+    cookie: {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'None',
+      maxAge: 1800000
+    },
     rolling:true
   });
 

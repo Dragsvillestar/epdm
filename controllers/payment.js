@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
             tx_ref: `${name}_${Date.now()}`, 
             amount,
             currency: "NGN",
-            redirect_url: "http://localhost:3001/api/initiate-payment/callback",
+            redirect_url: "https://epdm-ir3g.onrender.com/api/initiate-payment/callback",
             payment_options: "card, banktransfer", // Payment methods supported
             customer: { email, name }
         };
@@ -123,9 +123,9 @@ router.get('/callback', async (req, res) => {
             response.data.status === "successful" &&
             response.data.currency === "NGN"
         ) {
-            res.redirect(`http://localhost:5173/payment_info?success=true`);
+            res.redirect(`https://energyprojectsdata.onrender.com/payment_info?success=true`);
         } else {
-            res.redirect(`http://localhost:5173/payment_info?success=false`);
+            res.redirect(`https://energyprojectsdata.onrender.com/payment_info?success=false`);
         }
     } catch (err) {
         console.error(err);
